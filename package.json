@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen:types": "npx supabase gen types --lang=typescript --project-id mxwpvnxcecxvaphigssx > app/types/database.types.ts"
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.2",

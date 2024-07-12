@@ -33,7 +33,7 @@ export function AuthButton ({ session }: { session: Session | null }) {
         Sign in with Google
       </button>
           )
-        : <Button onClick={handleSignOut}>Sign Out</Button>
+        : <Button className='mt-1' onClick={handleSignOut}>Sign Out</Button>
     }
     </header>
   )
