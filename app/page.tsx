@@ -20,8 +20,8 @@ export default async function Home () {
     .order('created_at', { ascending: false })
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <section className='max-w-[600px] w-11/12 mx-auto border-l border-r border-white/80 min-h-screen'>
+    <main className="flex min-h-screen flex-col items-center justify-between light light:bg-gray-100 light:text-black bg-black text-white">
+      <section className='max-w-[600px] w-11/12 mx-auto border-l border-r border-gray-400 dark:border-white/80 min-h-screen'>
 
         <ComposeMessage profileAvatarUrl={session.user?.user_metadata?.avatar_url} />
         <MessageList messages={messages} />
