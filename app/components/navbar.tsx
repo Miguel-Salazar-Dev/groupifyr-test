@@ -4,6 +4,7 @@ import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, 
 import { IconHomeFilled, IconCirclePlusFilled, IconSettings2 } from '@tabler/icons-react'
 import { ThemeSwitcher } from './theme-switcher'
 import { AuthSignOutButton } from './auth-button-signout'
+import Link from 'next/link'
 
 export default function NavbarComponent ({
   profileAvatarUrl,
@@ -20,10 +21,10 @@ export default function NavbarComponent ({
     <nav className="w-full h-16 flex">
       <div className='flex flex-row w-full'>
         <div className='flex items-center justify-center w-1/3 text-default-500'>
-          <IconHomeFilled width={40} height={40} />
+          <Link href="/"><IconHomeFilled width={40} height={40} /></Link>
         </div>
         <div className='flex items-center justify-center w-1/3 text-default-700'>
-          <IconCirclePlusFilled width={60} height={60} />
+          <Link href="/send"><IconCirclePlusFilled width={60} height={60} /></Link>
         </div>
         <div className='flex items-center justify-center w-1/3'>
           <Dropdown>
@@ -33,7 +34,7 @@ export default function NavbarComponent ({
                 as="button"
                 className="transition-transform"
                 color="default"
-                name="Jason Hughes"
+                name={profileName}
                 size="md"
                 src={profileAvatarUrl}
               />
