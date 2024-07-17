@@ -1,11 +1,9 @@
 'use server'
-
 import { cookies } from 'next/headers'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { revalidatePath } from 'next/cache'
 
 export const addMessage = async (formData: FormData) => {
-  'use server'
   const content = formData.get('content')
   if (content == null) return
 

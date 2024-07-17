@@ -9,10 +9,11 @@ export function ComposeMessageButton () {
 
   return (
     <Button
+      isIconOnly
       isLoading={pending}
       type='submit'
       radius="full"
-      className="bg-gradient-to-tr from-sky-800 to-sky-500 text-white shadow-lg px-5 py-2 self-end"
+      className="bg-gradient-to-tr from-sky-800 to-sky-500 text-white shadow-lg"
     >
       {pending ? '' : <IconSend2 stroke={2} />}
     </Button>

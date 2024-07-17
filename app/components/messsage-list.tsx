@@ -1,5 +1,5 @@
 import MessageCard from './message-card'
-import { type Message } from '../types/posts'
+import { type Message } from '../types/messages'
 
 export function MessageList ({ messages }: { messages: Message[] }) {
   return (

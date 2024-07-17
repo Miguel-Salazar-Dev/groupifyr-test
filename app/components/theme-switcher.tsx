@@ -15,10 +15,10 @@ export function ThemeSwitcher () {
   if (!mounted) return null
 
   return (
-    <div className='flex flex-1 items-center justify-end pr-2'>
+    <div className='flex items-center pr-2'>
       {theme === 'light'
-        ? <button onClick={() => { setTheme('dark') }}><IconMoon stroke={1} /></button>
-        : <button onClick={() => { setTheme('light') }}><IconSun stroke={1} /></button>
+        ? <button onClick={() => { setTheme('dark') }}><div className='flex flex-row align-middle justify-start gap-1'><IconMoon stroke={1} width={20} height={20} /> Modo Oscuro</div></button>
+        : <button onClick={() => { setTheme('light') }}><div className='flex flex-row align-middle justify-start gap-1'><IconSun stroke={1} width={20} height={20} /> Modo Claro</div></button>
       }
     </div>
   )
