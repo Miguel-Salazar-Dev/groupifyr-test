@@ -6,15 +6,16 @@ import NavbarComponent from './components/navbar'
 
 export default async function Home () {
   const supabase = createServerComponentClient<Database>({ cookies })
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  if (session === null) {
+  if (user === null) {
     redirect('/login')
   }
 
   const { data } = await supabase
     .from('messages')
-    .select('*, author: profile(*), smiles: smile(user_id)')
+    .select('*, author: profile!inner(*), smiles: smile(user_id)')
+    .is('profile.admin', true)
     .order('created_at', { ascending: false })
 
   const messages =
@@ -22,7 +23,7 @@ export default async function Home () {
       const hasSmiles = Array.isArray(message.smiles)
       const userHasSmiledMessage = hasSmiles
         ? message.smiles.some(
-          (smile) => smile.user_id === session.user.id
+          (smile) => smile.user_id === user.id
         )
         : false
 
@@ -50,7 +51,7 @@ export default async function Home () {
             <MessageList messages={messages} />
           </div>
           <div className='w-full h-16 flex items-center justify-center'>
-            <NavbarComponent profileAvatarUrl={session.user?.user_metadata?.avatar_url} profileName={session.user?.user_metadata?.name} profileUserName={session.user?.user_metadata?.email} />
+            <NavbarComponent profileId={user.id} />
           </div>
         </div>
       </section>

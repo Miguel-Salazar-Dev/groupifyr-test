@@ -5,17 +5,41 @@ import { IconHomeFilled, IconCirclePlusFilled, IconSettings2 } from '@tabler/ico
 import { ThemeSwitcher } from './theme-switcher'
 import { AuthSignOutButton } from './auth-button-signout'
 import Link from 'next/link'
+import { useCallback, useEffect, useState } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function NavbarComponent ({
-  profileAvatarUrl,
-  profileUserName,
-  profileName
+  profileId
 }: {
-  profileAvatarUrl: string
-  profileUserName: string
-  profileName: string
+  profileId: string
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const supabase = createClientComponentClient<Database>()
+  const [name, setName] = useState<string | null>(null)
+  const [username, setUsername] = useState<string | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+
+  const getProfile = useCallback(async () => {
+    try {
+      const { data } = await supabase
+        .from('profile')
+        .select('name, username, avatar_url')
+        .eq('id', profileId)
+        .single()
+
+      if (data !== null) {
+        setName(data.name)
+        setUsername(data.username)
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      alert('Error al cargar los datos del usuario!')
+    }
+  }, [profileId, supabase])
+
+  useEffect(() => {
+    getProfile()
+  }, [profileId, getProfile])
 
   return (
     <nav className="w-full h-16 flex">
@@ -24,7 +48,7 @@ export default function NavbarComponent ({
           <Link href="/"><IconHomeFilled width={40} height={40} /></Link>
         </div>
         <div className='flex items-center justify-center w-1/3 text-default-700'>
-          <Link href="/send"><IconCirclePlusFilled width={60} height={60} /></Link>
+          <Link href="/send" ><IconCirclePlusFilled width={60} height={60} /></Link>
         </div>
         <div className='flex items-center justify-center w-1/3'>
           <Dropdown>
@@ -34,16 +58,16 @@ export default function NavbarComponent ({
                 as="button"
                 className="transition-transform"
                 color="default"
-                name={profileName}
+                name={name ?? ''}
                 size="md"
-                src={profileAvatarUrl}
+                src={avatarUrl ?? ''}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-20 gap-2">
                 <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">{profileName}</p>
-                <p className="font-semibold">{profileUserName}</p>
+                <p className="font-semibold">{name ?? ''}</p>
+                <p className="font-semibold">{username ?? ''}</p>
               </DropdownItem>
               <DropdownItem key="settings"><div className='flex flex-row align-middle justify-start gap-1'><IconSettings2 stroke={1} width={20} height={20} /> Configuracion</div></DropdownItem>
               <DropdownItem key="team_settings"><ThemeSwitcher /></DropdownItem>
