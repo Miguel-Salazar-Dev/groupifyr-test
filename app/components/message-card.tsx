@@ -1,6 +1,7 @@
 'use client'
 import { Card, CardHeader, CardBody, CardFooter, Avatar } from '@nextui-org/react'
-import { IconMoodHeart, IconMessage2 } from '@tabler/icons-react'
+import { IconMessage2 } from '@tabler/icons-react'
+import Smiles from './smiles'
 
 export default function MessageCard ({
   profileName,
@@ -25,8 +26,7 @@ export default function MessageCard ({
         <div className="flex gap-5">
           <Avatar isBordered radius="full" size="md" src={profileAvatarUrl} />
           <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="text-small font-semibold leading-none text-default-800">{profileName}</h4>
-            <h5 className="text-small tracking-tight text-default-500">{profileUserName}</h5>
+            <h4 className="text-medium font-semibold leading-none text-default-800">{profileName}</h4>
             <h6 className="text-xs tracking-tight text-default-500">{localDate(createdAt)}</h6>
           </div>
         </div>
@@ -38,13 +38,11 @@ export default function MessageCard ({
         </p>
 
       </CardBody>
-      <CardFooter className="gap-3">
+      <CardFooter className="flex flex-row w-full items-center justify-end gap-3">
       <button>
         <IconMessage2 className='w-5 h-5 text-gray-500' stroke={1} />
       </button>
-      <button>
-        <IconMoodHeart className='w-5 h-5 text-gray-500' stroke={1} />
-      </button>
+        <Smiles />
       </CardFooter>
     </Card>
   )

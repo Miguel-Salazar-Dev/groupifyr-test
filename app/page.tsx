@@ -2,8 +2,6 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { MessageList } from './components/messsage-list'
-import { type Database } from './types/database.types'
-import { type Message } from './types/messages'
 import NavbarComponent from './components/navbar'
 
 export default async function Home () {
@@ -14,10 +12,27 @@ export default async function Home () {
     redirect('/login')
   }
 
-  const { data: messages } = await supabase
+  const { data } = await supabase
     .from('messages')
-    .select('*, profile(name, username, avatar_url)')
+    .select('*, author: profile(*), smiles: smile(user_id)')
     .order('created_at', { ascending: false })
+
+  const messages =
+    data?.map((message) => {
+      const hasSmiles = Array.isArray(message.smiles)
+      const userHasSmiledMessage = hasSmiles
+        ? message.smiles.some(
+          (smile) => smile.user_id === session.user.id
+        )
+        : false
+
+      return {
+        ...message,
+        author: Array.isArray(message.author) ? message.author[0] : message.author,
+        user_has_smiled_message: userHasSmiledMessage,
+        smiles: hasSmiles ? message.smiles.length : 0
+      }
+    }) ?? []
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-gray-100 text-black dark:bg-black dark:text-white">
@@ -32,7 +47,7 @@ export default async function Home () {
             <h1 className='font-semibold text-3xl text-default-700 mr-1'>JC Bella Vista</h1>
           </div>
           <div className='flex-1 overflow-y-auto'>
-            <MessageList messages={messages as Message[]} />
+            <MessageList messages={messages} />
           </div>
           <div className='w-full h-16 flex items-center justify-center'>
             <NavbarComponent profileAvatarUrl={session.user?.user_metadata?.avatar_url} profileName={session.user?.user_metadata?.name} profileUserName={session.user?.user_metadata?.email} />
