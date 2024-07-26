@@ -1,11 +1,11 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { MessageList } from './components/messsage-list'
 import NavbarComponent from './components/navbar'
+import { createClient } from '@/utils/supabase/server'
 
 export default async function Home () {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  // const supabase = createServerComponentClient<Database>({ cookies })
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user === null) {

@@ -1,13 +1,13 @@
 'use server'
-import { cookies } from 'next/headers'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+
 import { revalidatePath } from 'next/cache'
+import { createClient } from '@/utils/supabase/server'
 
 export const addMessage = async (formData: FormData) => {
-  const content = formData.get('content')
+  const content = formData.get('content') as string
   if (content == null) return
 
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createClient()
   // Revisar autenticación del usuario
   const { data: { user } } = await supabase.auth.getUser()
   if (user == null) return

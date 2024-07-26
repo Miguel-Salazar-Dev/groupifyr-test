@@ -1,6 +1,6 @@
 'use client'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/utils/supabase/client'
 import { IconMoodHeart } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { startTransition } from 'react'
@@ -14,7 +14,7 @@ export default function Smiles ({
 }) {
   const router = useRouter()
   const handleSmiles = async () => {
-    const supabase = createClientComponentClient<Database>()
+    const supabase = createClient()
     const {
       data: { user }
     } = await supabase.auth.getUser()

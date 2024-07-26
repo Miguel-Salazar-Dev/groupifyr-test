@@ -9,6 +9,21 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      categories: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       group: {
         Row: {
           created_at: string
@@ -29,18 +44,24 @@ export interface Database {
       }
       messages: {
         Row: {
+          attachment_url: string | null
+          category: string | null
           content: string
           created_at: string
           id: string
           user_id: string
         }
         Insert: {
+          attachment_url?: string | null
+          category?: string | null
           content: string
           created_at?: string
           id?: string
           user_id: string
         }
         Update: {
+          attachment_url?: string | null
+          category?: string | null
           content?: string
           created_at?: string
           id?: string
@@ -64,6 +85,7 @@ export interface Database {
           id: string
           id_group: string | null
           name: string
+          update_at: string | null
           username: string
         }
         Insert: {
@@ -73,6 +95,7 @@ export interface Database {
           id?: string
           id_group?: string | null
           name: string
+          update_at?: string | null
           username: string
         }
         Update: {
@@ -82,6 +105,7 @@ export interface Database {
           id?: string
           id_group?: string | null
           name?: string
+          update_at?: string | null
           username?: string
         }
         Relationships: [

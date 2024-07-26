@@ -6,7 +6,7 @@ import { ThemeSwitcher } from './theme-switcher'
 import { AuthSignOutButton } from './auth-button-signout'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/utils/supabase/client'
 
 export default function NavbarComponent ({
   profileId
@@ -14,7 +14,7 @@ export default function NavbarComponent ({
   profileId: string
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClient()
   const [name, setName] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)

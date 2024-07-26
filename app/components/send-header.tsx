@@ -1,7 +1,7 @@
 'use client'
 
+import { createClient } from '@/utils/supabase/client'
 import { Avatar } from '@nextui-org/react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
@@ -11,7 +11,7 @@ export default function SendHeader ({
 }: {
   idUser: string
 }) {
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createClient()
   const [name, setName] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
