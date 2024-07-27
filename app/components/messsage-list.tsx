@@ -54,7 +54,7 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
     <Card key={message.id} className="shadow-none bg-transparent hover:bg-slate-300 dark:hover:bg-slate-800 transition border-b rounded-t-sm rounded-b-md border-gray-300 dark:border-white/20">
       <CardHeader className="justify-between">
         <div className="flex flex-row w-full gap-5">
-          <Avatar isBordered radius="full" size="md" src={message.author.avatar_url} />
+          <Avatar showFallback isBordered radius="full" size="md" className='text-gray-700 dark:text-gray-400' src={message.author.avatar_url} />
           <div className="flex flex-row flex-grow">
             <div className="flex flex-col gap-1 items-start justify-center">
               <h4 className="text-medium font-semibold leading-none text-default-800">{message.author.name}</h4>

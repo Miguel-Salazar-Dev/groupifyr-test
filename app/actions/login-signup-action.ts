@@ -7,30 +7,40 @@ import { redirect } from 'next/navigation'
 export async function login (formData: FormData) {
   const supabase = createClient()
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string
-  }
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  })
 
   if (error !== null) {
     redirect('/error')
   }
 
   revalidatePath('/', 'layout')
-  redirect('/account')
+  redirect('/')
 }
 
 export async function signup (formData: FormData) {
   const supabase = createClient()
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string
-  }
+  const name = formData.get('name') as string
+  const avatar_url = formData.get('name') as string
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signUp(data)
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        name,
+        avatar_url
+      }
+    }
+  })
 
   if (error !== null) {
     redirect('/error')

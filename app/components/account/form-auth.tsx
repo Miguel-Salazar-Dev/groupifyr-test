@@ -11,11 +11,27 @@ export default function FormAuth ({ option }: { option: string }) {
 
   return (
     <form className='flex flex-col items-center justify-center w-full gap-6'>
+      {option === 'SignUp'
+        ? (<Input
+          isClearable
+          required
+          size='md'
+          type="name"
+          name="name"
+          label="Nombre completo"
+          labelPlacement='outside'
+          variant='bordered'
+          placeholder="Ingresa tu nombre completo"
+          className='max-w-sm'
+        />)
+        : <></>
+      }
       <Input
         isClearable
         required
         size='md'
         type="email"
+        name="email"
         label="Correo electrónico"
         labelPlacement='outside'
         variant='bordered'
@@ -42,6 +58,7 @@ export default function FormAuth ({ option }: { option: string }) {
           </button>
           }
           type={isVisible ? 'text' : 'password'}
+          name="password"
           className='max-w-sm'
         />
         <div className='flex flex-row w-full max-w-sm items-center justify-evenly'>

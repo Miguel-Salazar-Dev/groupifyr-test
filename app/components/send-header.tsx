@@ -41,7 +41,7 @@ export default function SendHeader ({
   return (
     <div className='w-full flex flex-initial items-center justify-start'>
       <Link href={'/'}><IconArrowLeft stroke={2} width={30} height={30} /></Link>
-      <Avatar isBordered radius="full" size="lg" src={avatarUrl ?? ''} className='ml-2' />
+      <Avatar showFallback isBordered radius="full" size="lg" src={avatarUrl ?? ''} className='ml-2 text-gray-700 dark:text-gray-400' />
       <div className="flex flex-col gap-1 items-start justify-center ml-4">
         <h4 className="text-small font-semibold leading-none text-default-800">{name ?? ''}</h4>
         <h5 className="text-small tracking-tight text-default-500">{username ?? ''}</h5>
