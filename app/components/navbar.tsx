@@ -4,50 +4,19 @@ import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, 
 import { IconHomeFilled, IconLogout, IconMoon, IconPlus, IconSettings2, IconSun, IconUserEdit } from '@tabler/icons-react'
 import { AuthSignOutButton } from './auth-button-signout'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
 import { useTheme } from 'next-themes'
 
 export default function NavbarComponent ({
-  profileId
+  profileName,
+  profileUsername,
+  profileAvatarUrl
 }: {
-  profileId: string
+  profileName: string
+  profileUsername: string
+  profileAvatarUrl: string
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const supabase = createClient()
-  const [name, setName] = useState<string | null>(null)
-  const [username, setUsername] = useState<string | null>(null)
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
-  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
-
-  const getProfile = useCallback(async () => {
-    try {
-      const { data } = await supabase
-        .from('profile')
-        .select('name, username, avatar_url')
-        .eq('id', profileId)
-        .single()
-
-      if (data !== null) {
-        setName(data.name)
-        setUsername(data.username)
-        setAvatarUrl(data.avatar_url)
-      }
-    } catch (error) {
-      alert('Error al cargar los datos del usuario!')
-    }
-  }, [profileId, supabase])
-
-  useEffect(() => {
-    getProfile()
-  }, [profileId, getProfile])
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
 
   return (
     <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-300 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
@@ -80,7 +49,7 @@ export default function NavbarComponent ({
                 className="transition-transform text-gray-700 dark:text-gray-400"
                 color="default"
                 size="sm"
-                src={avatarUrl ?? ''}
+                src={profileAvatarUrl ?? ''}
               />
             </DropdownTrigger>
             <DropdownMenu
@@ -89,8 +58,8 @@ export default function NavbarComponent ({
             >
               <DropdownItem key="profile" href='/account' color='primary' startContent={<IconUserEdit stroke={1} />} className="h-20 gap-2 text-gray-800 dark:text-gray-400">
                 <User
-                  name={name ?? ''}
-                  description={username ?? ''}
+                  name={profileName ?? ''}
+                  description={profileUsername ?? ''}
                   avatarProps={{
                     src: '',
                     className: 'w-6 h-6 text-tiny hidden'

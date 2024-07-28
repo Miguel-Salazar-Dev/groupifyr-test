@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { MessageList } from './components/messsage-list'
 import NavbarComponent from './components/navbar'
 import { createClient } from '@/utils/supabase/server'
+import { GetUserProfile } from './actions/user-profile-action'
 
 export default async function Home () {
   const supabase = createClient()
@@ -34,6 +35,13 @@ export default async function Home () {
       }
     }) ?? []
 
+  const profile = await GetUserProfile()
+
+  const profileName = profile?.name
+  const profileUsername = profile?.username
+  const profileAvatarUrl = profile?.avatar_url
+  const profileGroupName = profile?.group.name
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-gray-100 text-black dark:bg-black dark:text-white">
       <section className='max-w-[600px] w-11/12 mx-auto border-l border-r border-gray-200 dark:border-white/80 min-h-screen'>
@@ -44,12 +52,12 @@ export default async function Home () {
             <div className='h-[100px] w-[100px] flex flex-col rounded-md bg-cover bg-center bg-no-repeat relative mb-[-50px] ml-1 z-50' style={{ backgroundImage: "url('https://uploads-ssl.webflow.com/666254e5dfd9646b06c34d12/6695d91f092ad1e024db6253_logo_jcbv_transparent_2.png')" }} />
           </div>
           <div className='flex flex-row w-full h-[50px] align-middle justify-end'>
-            <h1 className='font-semibold text-3xl text-default-700 mr-1'>{'JC Bella Vista'}</h1>
+            <h1 className='font-semibold text-3xl text-default-700 mr-1'>{profileGroupName}</h1>
           </div>
           <div className='flex-1 overflow-y-auto'>
             <MessageList messages={messages} />
           </div>
-          <NavbarComponent profileId={user.id} />
+          <NavbarComponent profileName={profileName ?? ''} profileUsername={profileUsername ?? ''} profileAvatarUrl={profileAvatarUrl ?? ''} />
         </div>
       </section>
     </main>
