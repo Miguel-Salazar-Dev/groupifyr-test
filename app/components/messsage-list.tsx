@@ -2,7 +2,7 @@
 
 import { useEffect, useOptimistic } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardHeader, CardBody, CardFooter, Avatar } from '@nextui-org/react'
+import { Card, CardHeader, CardBody, CardFooter, Avatar, Image } from '@nextui-org/react'
 import { IconMessage2 } from '@tabler/icons-react'
 import Smiles from './smiles'
 import { createClient } from '@/utils/supabase/client'
@@ -60,7 +60,7 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
               <h4 className="text-medium font-semibold leading-none text-default-800">{message.author.name}</h4>
               <h6 className="text-xs tracking-tight text-default-500">{localDate(message.created_at)}</h6>
             </div>
-            <div className="flex flex-row flex-grow justify-end">
+            <div className="flex flex-col flex-grow justify-end">
               <div>
                 <MessageBadge category={message.category} />
               </div>
@@ -73,7 +73,18 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
         <p>
           {message.content}
         </p>
-
+        <div>
+          {(message.message_has_attachment && message.attach.attachment !== '') &&
+            (
+              <Image
+                width={300}
+                height={200}
+                src={message.attach.attachment ?? ''}
+                alt="attachment image"
+              />
+            )
+          }
+        </div>
       </CardBody>
       <CardFooter className="flex flex-row w-full items-center justify-end gap-3">
       <button>

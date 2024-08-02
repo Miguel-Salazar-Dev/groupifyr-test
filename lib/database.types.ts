@@ -9,6 +9,45 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      attachments: {
+        Row: {
+          attachment: string
+          created_at: string
+          id: string
+          id_message: string
+          id_user: string
+        }
+        Insert: {
+          attachment: string
+          created_at?: string
+          id?: string
+          id_message: string
+          id_user: string
+        }
+        Update: {
+          attachment?: string
+          created_at?: string
+          id?: string
+          id_message?: string
+          id_user?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'attachments_id_message_fkey'
+            columns: ['id_message']
+            isOneToOne: false
+            referencedRelation: 'messages'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'attachments_id_user_fkey'
+            columns: ['id_user']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       categories: {
         Row: {
           id: string
@@ -44,7 +83,6 @@ export interface Database {
       }
       messages: {
         Row: {
-          attachment_url: string | null
           category: string | null
           content: string
           created_at: string
@@ -52,7 +90,6 @@ export interface Database {
           user_id: string
         }
         Insert: {
-          attachment_url?: string | null
           category?: string | null
           content: string
           created_at?: string
@@ -60,7 +97,6 @@ export interface Database {
           user_id: string
         }
         Update: {
-          attachment_url?: string | null
           category?: string | null
           content?: string
           created_at?: string

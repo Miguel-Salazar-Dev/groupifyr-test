@@ -14,7 +14,7 @@ export default async function Send () {
 
   const { data } = await supabase
     .from('messages')
-    .select('*, author: profile!inner(*), smiles: smile(user_id)')
+    .select('*, author: profile!inner(*), attach: attachments!inner(*), smiles: smile(user_id)')
     .eq('profile.id', user.id)
     .order('created_at', { ascending: false })
 
@@ -26,10 +26,18 @@ export default async function Send () {
           (smile) => smile.user_id === user.id
         )
         : false
+      const hasAttachment = Array.isArray(message.attach)
+      const messageHasAttachment = hasAttachment
+        ? message.attach.some(
+          (attachment) => attachment.id_user === user.id
+        )
+        : false
 
       return {
         ...message,
         author: Array.isArray(message.author) ? message.author[0] : message.author,
+        message_has_attachment: messageHasAttachment,
+        attach: Array.isArray(message.attach) ? message.attach[0] : message.attach,
         user_has_smiled_message: userHasSmiledMessage,
         smiles: hasSmiles ? message.smiles.length : 0
       }

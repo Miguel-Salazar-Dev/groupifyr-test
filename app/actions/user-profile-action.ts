@@ -10,10 +10,17 @@ export async function GetUserProfile () {
 
   const { data } = await supabase
     .from('profile')
-    .select('*, group!inner(name)')
+    .select('*, group!inner(*)')
     .eq('id', user.id)
     .single()
 
-  const profile = data
+  const profile = {
+    name: data?.name ?? '',
+    username: data?.username ?? '',
+    avatarurl: data?.avatar_url ?? '',
+    group: data?.group.name ?? '',
+    group_id: data?.group.id ?? ''
+  }
+
   return profile
 }

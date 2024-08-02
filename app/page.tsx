@@ -12,9 +12,15 @@ export default async function Home () {
     redirect('/login')
   }
 
+  const profile = await GetUserProfile()
+
+  const profileGroupName = profile?.group
+  const profileGroupId = profile?.group_id ?? ''
+
   const { data } = await supabase
     .from('messages')
-    .select('*, author: profile!inner(*), smiles: smile(user_id)')
+    .select('*, author: profile!inner(*), attach: attachments!inner(*), smiles: smile(user_id)')
+    .eq('profile.id_group', profileGroupId)
     .is('profile.admin', true)
     .order('created_at', { ascending: false })
 
@@ -26,21 +32,17 @@ export default async function Home () {
           (smile) => smile.user_id === user.id
         )
         : false
+      const hasAttachment = Array.isArray(message.attach)
 
       return {
         ...message,
         author: Array.isArray(message.author) ? message.author[0] : message.author,
+        message_has_attachment: hasAttachment,
+        attach: Array.isArray(message.attach) ? message.attach[0] : message.attach,
         user_has_smiled_message: userHasSmiledMessage,
         smiles: hasSmiles ? message.smiles.length : 0
       }
     }) ?? []
-
-  const profile = await GetUserProfile()
-
-  const profileName = profile?.name
-  const profileUsername = profile?.username
-  const profileAvatarUrl = profile?.avatar_url
-  const profileGroupName = profile?.group.name
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-gray-100 text-black dark:bg-black dark:text-white">
@@ -56,8 +58,9 @@ export default async function Home () {
           </div>
           <div className='flex-1 overflow-y-auto'>
             <MessageList messages={messages} />
+            <div className='flex flex-col w-full h-24' />
           </div>
-          <NavbarComponent profileName={profileName ?? ''} profileUsername={profileUsername ?? ''} profileAvatarUrl={profileAvatarUrl ?? ''} />
+          <NavbarComponent />
         </div>
       </section>
     </main>
