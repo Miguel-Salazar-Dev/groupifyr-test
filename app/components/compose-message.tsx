@@ -1,23 +1,30 @@
 'use client'
 
-import { Input, Textarea } from '@nextui-org/react'
+import { Select, type Selection, SelectItem, Textarea } from '@nextui-org/react'
 import { useRef, useState } from 'react'
 import { addMessage } from '../actions/add-message-action'
 import { ComposeMessageButton } from './compose-message-button'
 import { IconPaperclip, IconPhotoFilled } from '@tabler/icons-react'
+import { categories } from '../actions/category-messages'
 
 export function ComposeMessage () {
   const formRef = useRef<HTMLFormElement>(null)
-  const [fileName, setFileName] = useState<string | null>(null)
+  const [value, setValue] = useState<Selection>(new Set([]))
   const [isAttachment, setIsAttachment] = useState<string | null>('no')
+  const [preview, setPreview] = useState<string | null>(null)
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
     if (event.target.files === null || event.target.files.length === 0) {
       throw new Error('You must select an image to upload.')
     }
     const file = event.target.files[0]
-    setFileName(file.name)
+
     setIsAttachment('si')
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setPreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
 
     return file
   }
@@ -30,24 +37,32 @@ export function ComposeMessage () {
       }} className='flex flex-row p-3 border-b border-gray-300 dark:border-white/20 w-full align-middle justify-center'>
         <div className='flex flex-initial flex-row w-full align-middle justify-end gap-2'>
           <div className='flex flex-col w-full'>
+            <div className='flex flex-row w-full'>
+              {preview === null && <IconPhotoFilled />}
+              {preview !== null && <img src={preview} alt="Image preview" width="100" />}
+              <Select
+                label="Categoria"
+                name='category'
+                variant="bordered"
+                placeholder="Selecciona una categoria"
+                defaultSelectedKeys={['Mensaje']}
+                selectedKeys={value}
+                className="flex flex-initial w-4/5"
+                onSelectionChange={setValue}
+              >
+                {categories.map((category) => (
+                  <SelectItem key={category.key}>
+                    {category.label}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
             <Textarea
               name='content'
               variant="faded"
               placeholder="¡Cuentanos algo!"
               disableAutosize
-              rows={3}
-            />
-            <Input
-              isReadOnly
-              isDisabled
-              type="text"
-              label=""
-              variant='bordered'
-              labelPlacement='outside-left'
-              size='sm'
-              className='block w-full'
-              startContent={<IconPhotoFilled />}
-              value={fileName ?? ''}
+              rows={2}
             />
           </div>
           <div>

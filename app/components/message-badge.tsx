@@ -19,7 +19,7 @@ export default function MessageBadge ({ category }: { category: string | null })
   }
   // Movilidad
   if (category === 'Movilidad') {
-    tailWindProps = generalTailwind + 'bg-indigo-100 text-indigo-800 dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400'
+    tailWindProps = generalTailwind + 'bg-indigo-200 text-indigo-800 dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400'
   }
   // Ruido
   if (category === 'Ruido') {

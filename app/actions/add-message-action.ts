@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/server'
 export const addMessage = async (formData: FormData) => {
   const content = formData.get('content') as string
   const attachment = formData.get('file_input') as File
+  const category = formData.get('category') as string
   const isFileUploaded = formData.get('file_uploaded') as string
 
   let attachmentUrl = ''
@@ -23,16 +24,16 @@ export const addMessage = async (formData: FormData) => {
     attachmentUrl = await uploadAttachment(attachment, userId)
   }
 
-  insertMessageAndAttachment(content, userId, attachmentUrl, isFileUploaded)
+  insertMessageAndAttachment(content, userId, attachmentUrl, category, isFileUploaded)
 }
 
-const insertMessageAndAttachment = async (content: string, userId: string, attachmentUrl: string, isFileUploaded: string) => {
+const insertMessageAndAttachment = async (content: string, userId: string, attachmentUrl: string, category: string, isFileUploaded: string) => {
   const supabase = createClient()
   try {
     // Insert Message
     const { data: message, error: messageError } = await supabase
       .from('messages')
-      .insert({ content, user_id: userId })
+      .insert({ content, user_id: userId, category })
       .select('id')
       .single()
 

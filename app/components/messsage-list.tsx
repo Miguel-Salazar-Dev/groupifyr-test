@@ -60,7 +60,7 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
               <h4 className="text-medium font-semibold leading-none text-default-800">{message.author.name}</h4>
               <h6 className="text-xs tracking-tight text-default-500">{localDate(message.created_at)}</h6>
             </div>
-            <div className="flex flex-col flex-grow justify-end">
+            <div className="flex flex-row flex-grow justify-end">
               <div>
                 <MessageBadge category={message.category} />
               </div>
