@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@nextui-org/react'
-import { IconSend2 } from '@tabler/icons-react'
 import { useFormStatus } from 'react-dom'
+import SendIcon from '@/public/assets/send_icon.svg'
 
 export function ComposeMessageButton () {
   const { pending } = useFormStatus()
@@ -11,11 +11,13 @@ export function ComposeMessageButton () {
     <Button
       isIconOnly
       isLoading={pending}
+      variant="light"
+      color="primary"
       type='submit'
       radius="full"
-      className="bg-gradient-to-tr from-sky-800 to-sky-500 text-white shadow-lg"
+      className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
     >
-      {pending ? '' : <IconSend2 stroke={2} />}
+      {pending ? '' : <SendIcon className="w-5 h-5 rotate-90 rtl:-rotate-90" />}
     </Button>
   )
 }

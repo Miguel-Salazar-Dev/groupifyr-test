@@ -1,10 +1,10 @@
 'use client'
 
-import { Select, type Selection, SelectItem, Textarea } from '@nextui-org/react'
+import { Select, type Selection, SelectItem } from '@nextui-org/react'
 import { useRef, useState } from 'react'
 import { addMessage } from '../actions/add-message-action'
 import { ComposeMessageButton } from './compose-message-button'
-import { IconPaperclip, IconPhotoFilled } from '@tabler/icons-react'
+import { IconPaperclip } from '@tabler/icons-react'
 import { categories } from '../actions/category-messages'
 
 export function ComposeMessage () {
@@ -34,20 +34,17 @@ export function ComposeMessage () {
       <form ref={formRef} action={async (formData) => {
         await addMessage(formData)
         formRef.current?.reset()
-      }} className='flex flex-row p-3 border-b border-gray-300 dark:border-white/20 w-full align-middle justify-center'>
-        <div className='flex flex-initial flex-row w-full align-middle justify-end gap-2'>
-          <div className='flex flex-col w-full'>
-            <div className='flex flex-row w-full'>
-              {preview === null && <IconPhotoFilled />}
-              {preview !== null && <img src={preview} alt="Image preview" width="100" />}
+      }} className='flex flex-row p-1 w-full align-middle justify-center'>
+        <div className="flex items-center px-3 py-1 rounded-lg bg-gray-50 dark:bg-gray-700 w-full gap-1">
+          <div className='flex flex-row w-full gap-1 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500'>
+            <div className='flex flex-col w-full gap-[2px]'>
               <Select
-                label="Categoria"
                 name='category'
-                variant="bordered"
+                variant="underlined"
+                size="sm"
                 placeholder="Selecciona una categoria"
                 defaultSelectedKeys={['Mensaje']}
                 selectedKeys={value}
-                className="flex flex-initial w-4/5"
                 onSelectionChange={setValue}
               >
                 {categories.map((category) => (
@@ -56,27 +53,26 @@ export function ComposeMessage () {
                   </SelectItem>
                 ))}
               </Select>
+              <textarea
+                id="content"
+                name='content'
+                rows={2}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none"
+                placeholder="¡Cuentanos algo!">
+              </textarea>
             </div>
-            <Textarea
-              name='content'
-              variant="faded"
-              placeholder="¡Cuentanos algo!"
-              disableAutosize
-              rows={2}
-            />
-          </div>
-          <div>
-            <div className="flex items-center justify-center mb-1">
-              <label htmlFor="file_input" className="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                <div className="flex flex-col items-center justify-center pt-2 pb-2">
-                  <IconPaperclip className="w-6 h-6 text-gray-500 dark:text-gray-400" stroke={1.5} />
-                </div>
-                <input name="file_input" id="file_input" type="file" className="hidden" onChange={handleFileChange} />
-                <input name="file_uploaded" id="file_uploaded" type="text" className='hidden' value={isAttachment ?? ''} />
-              </label>
+            <div className='flex items-center justify-center'>
+              {preview !== null && <img src={preview} alt="Image preview" width="100" />}
             </div>
-            <ComposeMessageButton />
           </div>
+          <label htmlFor="file_input" className="inline-flex justify-center p-1 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+            <div className="flex flex-col items-center justify-center pt-2 pb-2">
+              <IconPaperclip className="w-6 h-6 text-gray-500 dark:text-gray-400" stroke={1.5} />
+            </div>
+            <input name="file_input" id="file_input" type="file" className="hidden" onChange={handleFileChange} />
+            <input name="file_uploaded" id="file_uploaded" type="text" className='hidden' value={isAttachment ?? ''} />
+          </label>
+          <ComposeMessageButton />
         </div>
       </form>
     </div>
