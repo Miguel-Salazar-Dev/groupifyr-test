@@ -65,19 +65,28 @@ export interface Database {
       }
       group: {
         Row: {
+          background_img: string
           created_at: string
           id: string
+          logo_img: string
           name: string
+          website: string | null
         }
         Insert: {
+          background_img: string
           created_at?: string
           id?: string
+          logo_img: string
           name: string
+          website?: string | null
         }
         Update: {
+          background_img?: string
           created_at?: string
           id?: string
+          logo_img?: string
           name?: string
+          website?: string | null
         }
         Relationships: []
       }
@@ -161,6 +170,69 @@ export interface Database {
           },
         ]
       }
+      send_to: {
+        Row: {
+          group_id: string
+          id: string
+          message_id: string
+          Sub_1_id: string | null
+          Sub_2_id: string | null
+          Sub_3_id: string | null
+        }
+        Insert: {
+          group_id: string
+          id?: string
+          message_id: string
+          Sub_1_id?: string | null
+          Sub_2_id?: string | null
+          Sub_3_id?: string | null
+        }
+        Update: {
+          group_id?: string
+          id?: string
+          message_id?: string
+          Sub_1_id?: string | null
+          Sub_2_id?: string | null
+          Sub_3_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'send_to_group_id_fkey'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'group'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'send_to_message_id_fkey'
+            columns: ['message_id']
+            isOneToOne: false
+            referencedRelation: 'messages'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'send_to_Sub_1_id_fkey'
+            columns: ['Sub_1_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_1'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'send_to_Sub_2_id_fkey'
+            columns: ['Sub_2_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_2'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'send_to_Sub_3_id_fkey'
+            columns: ['Sub_3_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_3'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       smile: {
         Row: {
           created_at: string
@@ -190,6 +262,243 @@ export interface Database {
           },
           {
             foreignKeyName: 'Smile_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sub_group_1: {
+        Row: {
+          created_at: string
+          group_id: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          group_id: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sub_group_1_group_id_fkey'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'group'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sub_group_2: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      sub_group_3: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      sub1_sub2: {
+        Row: {
+          id: string
+          sub_1_id: string
+          sub_2_id: string
+        }
+        Insert: {
+          id?: string
+          sub_1_id: string
+          sub_2_id: string
+        }
+        Update: {
+          id?: string
+          sub_1_id?: string
+          sub_2_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sub1_sub2_sub_1_id_fkey'
+            columns: ['sub_1_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_1'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sub1_sub2_sub_2_id_fkey'
+            columns: ['sub_2_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_2'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sub2_sub3: {
+        Row: {
+          id: string
+          sub_1_id: string | null
+          sub_2_id: string
+          sub_3_id: string
+        }
+        Insert: {
+          id?: string
+          sub_1_id?: string | null
+          sub_2_id: string
+          sub_3_id: string
+        }
+        Update: {
+          id?: string
+          sub_1_id?: string | null
+          sub_2_id?: string
+          sub_3_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sub2_sub3_sub_1_id_fkey'
+            columns: ['sub_1_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_1'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sub2_sub3_sub_2_id_fkey'
+            columns: ['sub_2_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_2'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sub2_sub3_sub_3_id_fkey'
+            columns: ['sub_3_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_3'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      sub3_sub1: {
+        Row: {
+          id: number
+          sub_1_id: string
+          sub_3_id: string
+        }
+        Insert: {
+          id?: number
+          sub_1_id: string
+          sub_3_id: string
+        }
+        Update: {
+          id?: number
+          sub_1_id?: string
+          sub_3_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'sub3_sub1_sub_1_id_fkey'
+            columns: ['sub_1_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_1'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sub3_sub1_sub_3_id_fkey'
+            columns: ['sub_3_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_3'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      user_address: {
+        Row: {
+          group_id: string | null
+          id: string
+          sub_1_id: string | null
+          sub_2_id: string | null
+          sub_3_id: string | null
+          user_id: string
+        }
+        Insert: {
+          group_id?: string | null
+          id?: string
+          sub_1_id?: string | null
+          sub_2_id?: string | null
+          sub_3_id?: string | null
+          user_id: string
+        }
+        Update: {
+          group_id?: string | null
+          id?: string
+          sub_1_id?: string | null
+          sub_2_id?: string | null
+          sub_3_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_address_group_id_fkey'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'group'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_address_sub_1_id_fkey'
+            columns: ['sub_1_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_1'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_address_sub_2_id_fkey'
+            columns: ['sub_2_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_2'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_address_sub_3_id_fkey'
+            columns: ['sub_3_id']
+            isOneToOne: false
+            referencedRelation: 'sub_group_3'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_address_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'profile'

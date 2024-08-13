@@ -1,11 +1,8 @@
 import { IconHomeFilled, IconPlus } from '@tabler/icons-react'
 import Link from 'next/link'
-import { GetUserProfile } from '../actions/user-profile-action'
 import ProfileButton from './profile-button'
 
-export default async function NavbarComponent () {
-  const profile = await GetUserProfile()
-
+export default function NavbarComponent ({ profile }: { profile: UserProfile | undefined }) {
   return (
     <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-300 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
       <div className="grid h-full max-w-lg grid-cols-3 mx-auto">

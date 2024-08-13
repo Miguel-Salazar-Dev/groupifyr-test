@@ -3,10 +3,17 @@ import NavbarComponent from '../components/navbar'
 import AccountForm from './account-form'
 import { createClient } from '@/utils/supabase/server'
 import { IconArrowLeft } from '@tabler/icons-react'
+import { redirect } from 'next/navigation'
+import { GetUserProfile } from '../actions/user-profile-action'
 
 export default async function Account () {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  const profile = await GetUserProfile()
+
+  if (user === null) {
+    redirect('/login')
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-gray-100 text-black dark:bg-black dark:text-white">
@@ -16,11 +23,11 @@ export default async function Account () {
             <Link href={'/'}><IconArrowLeft stroke={2} width={30} height={30} className='font-semibold text-3xl text-default-700' /></Link>
             <h1 className='font-semibold text-3xl text-default-700'>Pagina de Perfil</h1>
           </div>
-          <div className='w-full flex-grow flex flex-col justify-start py-5 px-3'>
+          <div className='w-full flex flex-col justify-start pt-5 px-3 pb-20 overflow-scroll'>
             <AccountForm user={user} />
           </div>
         </div>
-        <NavbarComponent />
+        <NavbarComponent profile={profile} />
       </section>
     </main>
   )
