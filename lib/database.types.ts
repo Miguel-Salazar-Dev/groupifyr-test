@@ -11,21 +11,21 @@ export interface Database {
     Tables: {
       attachments: {
         Row: {
-          attachment: string
+          attachment: string | null
           created_at: string
           id: string
           id_message: string
           id_user: string
         }
         Insert: {
-          attachment: string
+          attachment?: string | null
           created_at?: string
           id?: string
           id_message: string
           id_user: string
         }
         Update: {
-          attachment?: string
+          attachment?: string | null
           created_at?: string
           id?: string
           id_message?: string
@@ -172,28 +172,28 @@ export interface Database {
       }
       send_to: {
         Row: {
-          group_id: string
+          group_id: string | null
           id: string
           message_id: string
-          Sub_1_id: string | null
-          Sub_2_id: string | null
-          Sub_3_id: string | null
+          sub_1_id: string | null
+          sub_2_id: string | null
+          sub_3_id: string | null
         }
         Insert: {
-          group_id: string
+          group_id?: string | null
           id?: string
           message_id: string
-          Sub_1_id?: string | null
-          Sub_2_id?: string | null
-          Sub_3_id?: string | null
+          sub_1_id?: string | null
+          sub_2_id?: string | null
+          sub_3_id?: string | null
         }
         Update: {
-          group_id?: string
+          group_id?: string | null
           id?: string
           message_id?: string
-          Sub_1_id?: string | null
-          Sub_2_id?: string | null
-          Sub_3_id?: string | null
+          sub_1_id?: string | null
+          sub_2_id?: string | null
+          sub_3_id?: string | null
         }
         Relationships: [
           {
@@ -212,21 +212,21 @@ export interface Database {
           },
           {
             foreignKeyName: 'send_to_Sub_1_id_fkey'
-            columns: ['Sub_1_id']
+            columns: ['sub_1_id']
             isOneToOne: false
             referencedRelation: 'sub_group_1'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'send_to_Sub_2_id_fkey'
-            columns: ['Sub_2_id']
+            columns: ['sub_2_id']
             isOneToOne: false
             referencedRelation: 'sub_group_2'
             referencedColumns: ['id']
           },
           {
             foreignKeyName: 'send_to_Sub_3_id_fkey'
-            columns: ['Sub_3_id']
+            columns: ['sub_3_id']
             isOneToOne: false
             referencedRelation: 'sub_group_3'
             referencedColumns: ['id']

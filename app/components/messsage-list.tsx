@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useOptimistic } from 'react'
+import { useEffect, useOptimistic, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { IconMessage2, IconDownload } from '@tabler/icons-react'
+import { IconMessage2, IconDownload, IconPhotoSearch } from '@tabler/icons-react'
 import Smiles from './smiles'
 import { createClient } from '@/utils/supabase/client'
 import MessageBadge from './message-badge'
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
 
 export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
   const [optimisticMessages, addOptimisticMessage] = useOptimistic<
@@ -22,6 +23,8 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
 
   const supabase = createClient()
   const router = useRouter()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   useEffect(() => {
     const channel = supabase
@@ -47,6 +50,11 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
   const localDate = (createdAt: string) => {
     const DateLocal = new Date(createdAt).toLocaleString()
     return DateLocal
+  }
+
+  const handleImageClick = (imageUrl: string | null) => {
+    setSelectedImage(imageUrl)
+    onOpen()
   }
 
   return optimisticMessages.map((message) => (
@@ -77,8 +85,12 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
             (
             <div className='group relative my-2.5'>
               <div className='absolute w-full h-full bg-gray-900/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center'>
-                <button data-tooltip-target='download-image' className='inline-flex items-center justify-center rounded-full h-10 w-10 bg-white/30 hover:bg-white/50 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50'>
-                  <IconDownload stroke={2} />
+                <button
+                  data-tooltip-target='download-image'
+                  onClick={() => { handleImageClick(message.attach.attachment) }}
+                  className='inline-flex items-center justify-center rounded-full h-10 w-10 bg-white/30 hover:bg-white/50 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50'>
+                    <IconPhotoSearch stroke={2} />
+                    <IconDownload stroke={2} className='hidden' />
                 </button>
                 <div id='download-image' role='tooltip' className='absolute z-100 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700'>
                   Descargar la imagen
@@ -87,7 +99,7 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
               </div>
               <img
                 src={message.attach.attachment ?? ''}
-                className='rounded-lg mx-auto h-auto max-w-full'
+                className='rounded-lg mx-auto min-h-80'
               />
             </div>
             )
@@ -95,13 +107,39 @@ export function MessageList ({ messages }: { messages: MessageWithAuthor[] }) {
         </div>
         <hr className="my-4 w-full h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
         <div className="flex flex-row w-full items-center justify-end gap-3">
-          <button>
+          <button className='hidden'>
             <IconMessage2 className='w-5 h-5 text-gray-500' stroke={1} />
           </button>
-        <Smiles message={message} addOptimisticMessage={addOptimisticMessage} />
+          <Smiles message={message} addOptimisticMessage={addOptimisticMessage} />
         </div>
       </div>
     </div>
+    <Modal
+      isOpen={isOpen}
+      backdrop='blur'
+      placement="center"
+      size='3xl'
+      onOpenChange={onOpenChange}
+    >
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">Imagen Adjunta - {message.author.name}</ModalHeader>
+            <ModalBody>
+              <img
+                alt="Imagen Adjunta"
+                src={selectedImage ?? ''}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={onClose}>
+                Cerrar
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
     </div>
   ))
 }

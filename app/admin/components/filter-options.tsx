@@ -1,12 +1,16 @@
 'use client'
 
 import { createClient } from '@/utils/supabase/client'
-import { useEffect, useState } from 'react'
+import { Button, Select, SelectItem } from '@nextui-org/react'
+import { IconFilter, IconFilterOff, IconRefresh } from '@tabler/icons-react'
+import { type ChangeEvent, useEffect, useState } from 'react'
 
 export default function FilterOption ({ onChange }: { onChange: (categoria: string | null) => void }) {
   const supabase = createClient()
   const [categorias, setCategorias] = useState<string[]>([])
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string>('')
+  const [filter, setFilter] = useState<string | null>(null)
+  const [isFilter, setIsFilter] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -23,37 +27,60 @@ export default function FilterOption ({ onChange }: { onChange: (categoria: stri
     fetchCategories()
   }, [])
 
-  const handleRadioChange = (categoria: string | null) => {
-    setSelected(categoria)
+  const handleSelectionChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelected(e.target.value)
+    setFilter(e.target.value)
+  }
+
+  const handleIsFilterChange = () => {
+    setIsFilter(!isFilter)
+    setFilter(null)
   }
 
   useEffect(() => {
-    onChange(selected)
-  }, [selected])
+    onChange(filter)
+  }, [filter])
 
   return (
-    <div className="flex flex-col w-full gap-3 pl-4 items-start justify-start">
-      <p>FILTROS</p>
-      <div className="flex items-center justify-start">
-        <input
-          type="radio"
-          checked={selected === null}
-          onChange={() => { handleRadioChange(null) }}
-          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-        />
-        <label htmlFor="default-radio-1" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sin filtro</label>
+    <div className="flex flex-row w-full gap-3 items-center justify-center">
+      <Button
+        isIconOnly
+        color="default"
+        size="sm"
+        aria-label="Refresh"
+      >
+        <IconRefresh stroke={1} />
+      </Button>
+      <Button
+        isIconOnly
+        color="default"
+        size="sm"
+        aria-label="Filtro"
+        onPress={handleIsFilterChange}
+      >
+        {isFilter
+          ? (<IconFilter stroke={1} />)
+          : (<IconFilterOff stroke={1} />)
+        }
+      </Button>
+      <div className='flex flex-col w-full'>
+        <Select
+          label="Filtros"
+          isDisabled={!isFilter}
+          variant="underlined"
+          placeholder='Escoja un filtro'
+          selectedKeys={[selected]}
+          size="sm"
+          onChange={handleSelectionChange}
+          className={!isFilter ? 'invisible' : 'visible'}
+        >
+          {categorias.map(categoria => (
+            <SelectItem key={categoria}>
+              {categoria}
+            </SelectItem>
+          ))}
+        </Select>
       </div>
-      {categorias.map(categoria => (
-        <div key={categoria} className="flex items-center justify-start">
-          <input
-            type="radio"
-            checked={selected === categoria}
-            onChange={() => { handleRadioChange(categoria) }}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          />
-          <label htmlFor="default-radio-1" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{categoria}</label>
-        </div>
-      ))}
     </div>
   )
 }

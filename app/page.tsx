@@ -104,10 +104,10 @@ export default function Home () {
           const filtersForMessage = messageFilters.filter((filter) => filter.message_id === message.id)
 
           return filtersForMessage.some((filter) => {
-            const groupMatch = profileGroupId === userGroups.group || profileGroupId === null
-            const subGroup1Match = filter.Sub_1_id === userGroups.sub_group_1 || filter.Sub_1_id === null
-            const subGroup2Match = filter.Sub_2_id === userGroups.sub_group_2 || filter.Sub_2_id === null
-            const subGroup3Match = filter.Sub_3_id === userGroups.sub_group_3 || filter.Sub_3_id === null
+            const groupMatch = filter.group_id === userGroups.group || filter.group_id === null
+            const subGroup1Match = filter.sub_1_id === userGroups.sub_group_1 || filter.sub_1_id === null
+            const subGroup2Match = filter.sub_2_id === userGroups.sub_group_2 || filter.sub_2_id === null
+            const subGroup3Match = filter.sub_3_id === userGroups.sub_group_3 || filter.sub_3_id === null
 
             return groupMatch && subGroup1Match && subGroup2Match && subGroup3Match
           })
@@ -121,10 +121,6 @@ export default function Home () {
       fetchMessages()
     }
   }, [profileGroupId, userGroups])
-
-  // useEffect(() => {
-  //  console.log(userGroups)
-  // }, [userGroups])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-gray-100 text-black dark:bg-black dark:text-white">

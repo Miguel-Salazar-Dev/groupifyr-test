@@ -2,20 +2,53 @@
 
 import FilterOption from './filter-options'
 import { MessageList } from '@/app/components/messsage-list'
-import { useState } from 'react'
-import NavbarAdmin from '@/app/components/admin/navbar-admin'
-import SidebarLeft from '@/app/components/admin/sidebar-left'
+import { Suspense, useEffect, useState } from 'react'
+import { createClient } from '@/utils/supabase/client'
 
 export default function InboxAdmin ({
-  profile,
-  messages
+  profileGroupId,
+  userId
 }: {
-  profile: UserProfile
-  messages: MessageWithAuthor[]
+  profileGroupId: string
+  userId: string
 }) {
-  // Group information
-  const profileBackgroundImage = profile?.group_backgroud
+  const supabase = createClient()
   const [filtro, setFiltro] = useState<string | null>(null)
+  const [messages, setMessages] = useState<MessageWithAuthor[]>([])
+
+  useEffect(() => {
+    const getMessages = async () => {
+      const { data } = await supabase
+        .from('messages')
+        .select('*, author: profile!inner(*), attach: attachments!inner(*), smiles: smile(user_id)')
+        .eq('profile.id_group', profileGroupId)
+        .is('profile.admin', false)
+        .order('created_at', { ascending: false })
+
+      const messages =
+        data?.map((message) => {
+          const hasSmiles = Array.isArray(message.smiles)
+          const userHasSmiledMessage = hasSmiles
+            ? message.smiles.some(
+              (smile) => smile.user_id === userId
+            )
+            : false
+          const hasAttachment = Array.isArray(message.attach)
+
+          return {
+            ...message,
+            author: Array.isArray(message.author) ? message.author[0] : message.author,
+            message_has_attachment: hasAttachment,
+            attach: Array.isArray(message.attach) ? message.attach[0] : message.attach,
+            user_has_smiled_message: userHasSmiledMessage,
+            smiles: hasSmiles ? message.smiles.length : 0
+          }
+        }) ?? []
+
+      setMessages(messages)
+    }
+    getMessages()
+  }, [profileGroupId])
 
   const handleFilterChange = (categoriaSeleccionada: string | null) => {
     setFiltro(categoriaSeleccionada)
@@ -26,23 +59,22 @@ export default function InboxAdmin ({
     : messages.filter(message => message.category === filtro)
 
   return (
-    <main className="flex min-h-screen bg-gray-100 text-black dark:bg-black dark:text-white">
-      <NavbarAdmin profile={profile} />
-      <SidebarLeft profileBackgroundImage={profileBackgroundImage} />
-      <aside id="separator-sidebar-right" className='fixed top-0 right-0 z-45 w-32 h-screen transition-transform -translate-x-full sm:translate-x-0' aria-label="Filter sidebar">
-        <div className='h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800'>
+    <section className='static max-w-[800px] mx-auto border-l border-r border-gray-200 dark:border-white/80 min-h-screen'>
+      <div>
+        <div className='px-3 py-1 bg-gray-200 dark:bg-gray-800 rounded'>
           <div className='flex flex-col space-y-2 font-normal h-full w-full items-start justify-center'>
             <FilterOption onChange={handleFilterChange} />
           </div>
         </div>
-      </aside>
-
-      <div className='pt-14 max-w-[600px] w-11/12 mx-auto border-l border-r border-gray-200 dark:border-white/80 min-h-screen'>
-        <div className='flex-1 overflow-y-auto'>
-          <MessageList messages={filteredMessages} />
-          <div className='flex flex-col w-full h-24' />
+        <div className='pt-14'>
+          <div className='flex-1 overflow-y-auto'>
+            <Suspense fallback={<p>Loading Messages...</p>}>
+              <MessageList messages={filteredMessages} />
+            </Suspense>
+            <div className='flex flex-col w-full h-24' />
+          </div>
         </div>
       </div>
-    </main>
+    </section>
   )
 }

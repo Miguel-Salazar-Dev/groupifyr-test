@@ -1,46 +1,59 @@
 'use client'
+import { GetUserProfile } from '@/app/actions/user-profile-action'
 import { createClient } from '@/utils/supabase/client'
 import { Select, SelectItem, Switch } from '@nextui-org/react'
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react'
 import { type ChangeEvent, useEffect, useState } from 'react'
 
+interface FilterBoxProps {
+  onFilterSelect: (filter: any) => void
+  isFiltered: (isAllCorregimiento: boolean) => void
+}
+
 interface FilterData {
+  group: Array<{ id: string, name: string }>
   subGroup1: Array<{ id: string, name: string }>
   subGroup2: Array<{ id: string, name: string }>
   subGroup3: Array<{ id: string, name: string }>
 }
 
-export default function FilterBox ({ onFilterSelect }: { onFilterSelect: (filter: any) => void }) {
+export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProps) {
   const [filterData, setFilterData] = useState<FilterData>({
+    group: [],
     subGroup1: [],
     subGroup2: [],
     subGroup3: []
   })
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
-
+  const [selectedGroup, setSelectedGroup] = useState<string[]>([])
   const [selectedSubGroup1, setSelectedSubGroup1] = useState<string[]>([])
   const [selectedSubGroup2, setSelectedSubGroup2] = useState<string[]>([])
   const [selectedSubGroup3, setSelectedSubGroup3] = useState<string[]>([])
-  const [allCorregimiento, setAllCorregimiento] = useState<boolean>(true)
+  const [allCorregimiento, setAllCorregimiento] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchFilterData = async () => {
       setLoading(true)
       try {
         const supabase = createClient()
+        const profile = GetUserProfile()
+        const { data: group, error: errorGroup } = await supabase.from('group').select('id, name').eq('id', (await profile).group_id)
         const { data: subGroup1, error: error1 } = await supabase.from('sub_group_1').select('id, name')
         const { data: subGroup2, error: error2 } = await supabase.from('sub_group_2').select('id, name')
         const { data: subGroup3, error: error3 } = await supabase.from('sub_group_3').select('id, name')
 
-        if (error1 !== null || error2 !== null || error3 !== null) {
+        if (errorGroup !== null || error1 !== null || error2 !== null || error3 !== null) {
           throw new Error('Error al recuperar datos de la base de datos')
         }
 
-        if (Array.isArray(subGroup1) && subGroup1.length > 0 &&
+        if (
+          Array.isArray(group) && group.length > 0 &&
+          Array.isArray(subGroup1) && subGroup1.length > 0 &&
           Array.isArray(subGroup2) && subGroup2.length > 0 &&
-          Array.isArray(subGroup3) && subGroup3.length > 0) {
-          setFilterData({ subGroup1, subGroup2, subGroup3 })
+          Array.isArray(subGroup3) && subGroup3.length > 0
+        ) {
+          setFilterData({ group, subGroup1, subGroup2, subGroup3 })
         } else {
           throw new Error('Datos incompletos o no disponibles')
         }
@@ -57,21 +70,35 @@ export default function FilterBox ({ onFilterSelect }: { onFilterSelect: (filter
 
   useEffect(() => {
     onFilterSelect({
+      group: selectedGroup,
       subGroup1: selectedSubGroup1,
       subGroup2: selectedSubGroup2,
       subGroup3: selectedSubGroup3
     })
-  }, [selectedSubGroup1, selectedSubGroup2, selectedSubGroup3])
+    isFiltered(
+      allCorregimiento
+    )
+  }, [allCorregimiento, selectedGroup, selectedSubGroup1, selectedSubGroup2, selectedSubGroup3])
 
-  const allCorregimientoChange = (isSelected: boolean) => {
-    setAllCorregimiento(isSelected)
-  }
+  useEffect(() => {
+    const setHandleAllGroup = () => {
+      if (allCorregimiento) {
+        setSelectedGroup(Array.from(filterData.group[0].id.split(',')))
+        setSelectedSubGroup1([])
+        setSelectedSubGroup2([])
+        setSelectedSubGroup3([])
+      } else {
+        setSelectedGroup([])
+      }
+    }
+    setHandleAllGroup()
+  }, [allCorregimiento, loading])
 
   return (
-    <div>
+    <div className='flex flex-col gap-3'>
       <Switch
         isSelected={allCorregimiento}
-        onValueChange={allCorregimientoChange}
+        onValueChange={setAllCorregimiento}
         size='lg'
         color='success'
         startContent={<IconCircleCheck stroke={2} />}
@@ -79,8 +106,8 @@ export default function FilterBox ({ onFilterSelect }: { onFilterSelect: (filter
       >
         ¿Envío a todo el corregimiento?
       </Switch>
-      <p className="text-small text-default-500">Selected: {allCorregimiento ? 'true' : 'false'}</p>
-      {loading ? <p>cargando...</p> : <p>Listo!!!</p>}
+      <p className="text-small text-default-500">{loading ? 'cargando...' : 'Listo!!!'}</p>
+      <p className="text-small text-default-500">{error ?? 'No hay errores'}</p>
       <Select
         label="Barrios"
         isDisabled={allCorregimiento}
@@ -96,7 +123,6 @@ export default function FilterBox ({ onFilterSelect }: { onFilterSelect: (filter
           </SelectItem>
         ))}
       </Select>
-      <p className="text-small text-default-500">Selected: {Array.from(selectedSubGroup1).join(', ')}</p>
 
       <Select
         label="Dirección"
@@ -113,7 +139,6 @@ export default function FilterBox ({ onFilterSelect }: { onFilterSelect: (filter
           </SelectItem>
         ))}
       </Select>
-      <p className="text-small text-default-500">Selected: {Array.from(selectedSubGroup2).join(', ')}</p>
 
       <Select
         label="Propiedades (P.H.)"
@@ -130,8 +155,6 @@ export default function FilterBox ({ onFilterSelect }: { onFilterSelect: (filter
           </SelectItem>
         ))}
       </Select>
-      <p className="text-small text-default-500">Selected: {Array.from(selectedSubGroup3).join(', ')}</p>
-      {error !== null ? <p>{error}</p> : 'No hay errores'}
     </div>
   )
 }
