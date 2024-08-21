@@ -4,10 +4,15 @@ import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, 
 import { IconLogout, IconMoon, IconSettings2, IconSun, IconUserEdit } from '@tabler/icons-react'
 import { AuthSignOutButton } from './auth-button-signout'
 import { useTheme } from 'next-themes'
+import { useSelector } from 'react-redux'
+import { type RootState } from '@/lib/store'
 
-export default function ProfileButton ({ profile }: { profile: UserProfile | undefined }) {
+// import { useUserProfile } from '../contexts/user-profile-context'
+
+export default function ProfileButton () {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { theme, setTheme } = useTheme()
+  const profile = useSelector((state: RootState) => state.userProfile)
 
   return (
     <div>
@@ -34,7 +39,7 @@ export default function ProfileButton ({ profile }: { profile: UserProfile | und
                 description={(
                   <div>
                     <p>{profile?.username}</p>
-                    <p>{profile?.group}</p>
+                    <p>{profile?.group_name}</p>
                   </div>
                 )}
                 avatarProps={{

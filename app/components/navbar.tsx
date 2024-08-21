@@ -2,7 +2,7 @@ import { IconHomeFilled, IconPlus } from '@tabler/icons-react'
 import Link from 'next/link'
 import ProfileButton from './profile-button'
 
-export default function NavbarComponent ({ profile }: { profile: UserProfile | undefined }) {
+export default function NavbarComponent () {
   return (
     <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-300 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
       <div className="grid h-full max-w-lg grid-cols-3 mx-auto">
@@ -25,7 +25,7 @@ export default function NavbarComponent ({ profile }: { profile: UserProfile | u
           <div className="tooltip-arrow" data-popper-arrow></div>
         </div>
         <div data-tooltip-target="tooltip-profile" className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-100 dark:hover:bg-gray-800 group">
-          <ProfileButton profile={profile} />
+          <ProfileButton />
         </div>
     </div>
     </div>

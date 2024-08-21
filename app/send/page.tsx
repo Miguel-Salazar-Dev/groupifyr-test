@@ -48,7 +48,7 @@ export default async function Send () {
       <section className='max-w-[600px] w-11/12 mx-auto border-l border-r border-gray-400 dark:border-white/80 min-h-screen'>
         <div className='flex flex-col h-screen'>
           <div className='w-full h-1/10 flex flex-initial items-center justify-start border pt-2 pb-2'>
-            <SendHeader idUser={user.id} />
+            <SendHeader />
           </div>
           <div className='flex-1 overflow-y-auto bg-gray-200 p-3 rounded-md'>
             <MessageList messages={messages} />

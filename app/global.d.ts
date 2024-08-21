@@ -22,7 +22,7 @@ declare global {
     name: string
     username: string
     avatarurl: string
-    group: string
+    group_name: string
     group_id: string
     group_backgroud: string
     group_logo: string
