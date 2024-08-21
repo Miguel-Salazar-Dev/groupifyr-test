@@ -3,22 +3,27 @@
 import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure, User } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import { AuthSignOutButton } from '../auth-button-signout'
-import { useState } from 'react'
-import SidebarItem from '@/app/admin/components/sidebar-item'
-import { IconLogout, IconMoon, IconSun, IconUserEdit } from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
+import { IconInbox, IconLogout, IconMoon, IconSend, IconSun, IconUserEdit, IconUsersGroup } from '@tabler/icons-react'
+import { useSelector } from 'react-redux'
+import { type RootState } from '@/lib/store'
 
-export default function NavbarAdmin ({ profile }: { profile: UserProfile }) {
+interface OptionsProps {
+  onOptionSelect: (option: string) => void
+}
+
+export default function NavbarAdmin ({ onOptionSelect }: OptionsProps) {
+  const profile = useSelector((state: RootState) => state.userProfile)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [isMenuOpen, setMenuIsOpen] = useState<boolean>(true) // Inicia abierto
   const { theme, setTheme } = useTheme()
-  // profile information
-  const profileName = profile.name
-  const profileUsername = profile.username
-  const profileAvatarUrl = profile.avatarurl
-  // Group information
-  const profileGroupName = profile.group
-  const profileLogoImage = profile.group_logo
-  const profileBackgroundImage = profile.group_backgroud
+  const [optionMenu, setOptionMenu] = useState<string>('IconInbox')
+
+  useEffect(() => {
+    onOptionSelect(
+      optionMenu
+    )
+  }, [optionMenu])
 
   return (
     <div className="relative flex min-h-screen">
@@ -30,27 +35,60 @@ export default function NavbarAdmin ({ profile }: { profile: UserProfile }) {
         <div className="flex flex-col items-center h-1/2 pt-20">
           <div className="flex flex-row">
             <Image
-              src={profileLogoImage}
-              alt={`${profileGroupName} Logo`}
+              src={profile.group_logo}
+              alt={`${profile.group_name} Logo`}
               className="mr-3 h-6 sm:h-9"
             />
             <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-              {profileGroupName}
+              {profile.group_name}
             </span>
           </div>
           <div className="mt-8 px-2">
             <Image
               isBlurred
               alt="Imagen de fondo del grupo"
-              src={profileBackgroundImage}
+              src={profile.group_backgroud}
               fallbackSrc="https://mxwpvnxcecxvaphigssx.supabase.co/storage/v1/object/public/groups/fallback_image.jpg"
             />
           </div>
-          <div className="mt-12">
+          <div className="mt-12 px-2">
             <ul>
-              <SidebarItem href={'#'} icon={'IconInbox'} text={'Bandeja de entrada'} />
-              <SidebarItem href={'#'} icon={'IconSend'} text={'Enviar mensaje'} />
-              <SidebarItem href={'#'} icon={'IconUsersGroup '} text={'Configuración del Grupo'} />
+              <Button
+                size="md"
+                radius="sm"
+                color="default"
+                variant='flat'
+                startContent={<IconInbox stroke={2} />}
+                onPress={() => { setOptionMenu('IconInbox') }}
+                fullWidth
+                className='justify-start items-center p-2 bg-transparent text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
+              >
+                Bandeja de entrada
+              </Button>
+              <Button
+                size="md"
+                radius="sm"
+                color="default"
+                variant='flat'
+                startContent={<IconSend stroke={2} />}
+                onPress={() => { setOptionMenu('IconSend') }}
+                fullWidth
+                className='justify-start items-center p-2 bg-transparent text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
+              >
+                Enviar mensaje
+              </Button>
+              <Button
+                size="md"
+                radius="sm"
+                color="default"
+                variant='flat'
+                startContent={<IconUsersGroup stroke={2} />}
+                onPress={() => { setOptionMenu('IconUsersGroup') }}
+                fullWidth
+                className='justify-start items-center p-2 bg-transparent text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
+              >
+                Configuración del Grupo
+              </Button>
             </ul>
           </div>
 
@@ -65,19 +103,19 @@ export default function NavbarAdmin ({ profile }: { profile: UserProfile }) {
                 as="button"
                 className="transition-transform text-gray-700 dark:text-gray-400"
                 color="primary"
-                name={profileName}
+                name={profile.name}
                 size="lg"
-                src={profileAvatarUrl}
+                src={profile.avatarurl}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" href="#" color="primary" startContent={<IconUserEdit stroke={1} />} className="h-20 gap-2 text-gray-800 dark:text-gray-400">
                 <User
-                  name={profileName}
+                  name={profile.name}
                   description={(
                     <div>
-                      <p>{profileUsername}</p>
-                      <p>{profileGroupName}</p>
+                      <p>{profile.username}</p>
+                      <p>{profile.group_name}</p>
                     </div>
                   )}
                   avatarProps={{

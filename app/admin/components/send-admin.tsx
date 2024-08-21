@@ -1,35 +1,23 @@
 'use client'
 import { createClient } from '@/utils/supabase/client'
-import NavbarAdmin from '../components/admin/navbar-admin'
-// import { GetUserProfile } from '../actions/user-profile-action'
-import FilterBox from '../admin/components/filter-box'
 import { type ChangeEvent, type ChangeEventHandler, Suspense, useState } from 'react'
 import { Button, Select, SelectItem, Textarea } from '@nextui-org/react'
 import { useFormStatus } from 'react-dom'
 import SendIcon from '@/public/assets/send_icon.svg'
-import { categoriesAdmin } from '../actions/category-messages'
 import { IconPaperclip, IconFilterOff } from '@tabler/icons-react'
-// import { revalidatePath } from 'next/cache'
+import FilterBox from './filter-box'
+import { categoriesAdmin } from '@/app/actions/category-messages'
+import { revalidatePath } from 'next/cache'
 
-export default function AdminSend () {
+export default function SendAdmin () {
   const [filters, setFilters] = useState<any>({})
   const [isFiltered, setIsFiltered] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
   const [category, setCategory] = useState<string>('')
-  // const [profile, setProfile] = useState<any>({})
   const { pending } = useFormStatus()
   const [isAttachment, setIsAttachment] = useState<string>('no')
   const [preview, setPreview] = useState<string | null>(null)
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
-
-  // useEffect(() => {
-  //  const getUserInformation = async () => {
-  //    const profile = await GetUserProfile()
-  //    setProfile(profile)
-  //  }
-
-  //  getUserInformation()
-  // }, [])
 
   const handleFileChange: ChangeEventHandler<HTMLInputElement> = async (event) => {
     if (event.target.files === null || event.target.files.length === 0) {
@@ -127,7 +115,7 @@ export default function AdminSend () {
         console.error('Error al aplicar filtros al mensaje: ', filtersError)
       }
       console.log('Message inserted successfully')
-      // revalidatePath('/')
+      revalidatePath('/')
     }
   }
 
@@ -153,8 +141,6 @@ export default function AdminSend () {
   }
 
   return (
-    <main className="flex min-h-screen bg-gray-50 text-black dark:bg-black dark:text-white">
-      <NavbarAdmin />
       <section className='pl-72 w-11/12 min-h-screen'>
         <div className='flex flex-col w-full h-screen p-5'>
           <div id="branding" className='flex flex-row gap-5 w-full h-[150px] bg-blue-300'>
@@ -256,13 +242,12 @@ export default function AdminSend () {
               </div>
             </div>
             <div id="filterSelect" className='flex flex-col w-1/4'>
-              <Suspense fallback={<p>Carggando...</p>}>
+              <Suspense fallback={<p>Cargando...</p>}>
                 <FilterBox onFilterSelect={setFilters} isFiltered={setIsFiltered}/>
               </Suspense>
             </div>
           </div>
         </div>
       </section>
-    </main>
   )
 }

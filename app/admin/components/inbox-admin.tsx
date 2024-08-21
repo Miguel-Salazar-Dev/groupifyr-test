@@ -4,24 +4,29 @@ import FilterOption from './filter-options'
 import { MessageList } from '@/app/components/messsage-list'
 import { Suspense, useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
+import { type RootState } from '@/lib/store'
 
-export default function InboxAdmin ({
-  profileGroupId,
-  userId
-}: {
-  profileGroupId: string
-  userId: string
-}) {
+export default function InboxAdmin () {
   const supabase = createClient()
+  const router = useRouter()
+  const profile = useSelector((state: RootState) => state.userProfile)
   const [filtro, setFiltro] = useState<string | null>(null)
   const [messages, setMessages] = useState<MessageWithAuthor[]>([])
 
   useEffect(() => {
     const getMessages = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user === null) {
+        router.push('/login')
+        return
+      }
+
       const { data } = await supabase
         .from('messages')
         .select('*, author: profile!inner(*), attach: attachments!inner(*), smiles: smile(user_id)')
-        .eq('profile.id_group', profileGroupId)
+        .eq('profile.id_group', profile.group_id)
         .is('profile.admin', false)
         .order('created_at', { ascending: false })
 
@@ -30,7 +35,7 @@ export default function InboxAdmin ({
           const hasSmiles = Array.isArray(message.smiles)
           const userHasSmiledMessage = hasSmiles
             ? message.smiles.some(
-              (smile) => smile.user_id === userId
+              (smile) => smile.user_id === user.id
             )
             : false
           const hasAttachment = Array.isArray(message.attach)
@@ -48,7 +53,7 @@ export default function InboxAdmin ({
       setMessages(messages)
     }
     getMessages()
-  }, [profileGroupId])
+  }, [profile.group_id, router])
 
   const handleFilterChange = (categoriaSeleccionada: string | null) => {
     setFiltro(categoriaSeleccionada)

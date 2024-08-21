@@ -4,13 +4,8 @@ import { useSelector } from 'react-redux'
 import { MessageList } from '../components/messsage-list'
 import NavbarComponent from '../components/navbar'
 import { createClient } from '@/utils/supabase/client'
-// import { GetUserProfile } from '../actions/user-profile-action'
 import { useEffect, useState } from 'react'
 import { type RootState } from '@/lib/store'
-
-// import { useUserProfile } from '../contexts/user-profile-context'
-// import { useRouter } from 'next/navigation'
-
 interface UserAddress {
   group: string | null
   sub_group_1: string | null
@@ -19,40 +14,11 @@ interface UserAddress {
 }
 
 export default function Inbox () {
-  // const router = useRouter()
   const supabase = createClient()
   const [messages, setMessages] = useState<MessageWithAuthor[]>([])
   const [userGroups, setUserGroups] = useState<UserAddress | null>(null)
 
   const profile = useSelector((state: RootState) => state.userProfile)
-  // const [userProfile, setUserProfile] = useState<UserProfile>()
-  // const [profileGroupName, setProfileGroupName] = useState<string>('')
-  // const [profileGroupId, setProfileGroupId] = useState<string>('')
-  // const [profileBackgroundImage, setProfileBackgroundImage] = useState<string>('')
-  // const [profileLogoImage, setProfileLogoImage] = useState<string>('')
-  // const [profileIsAdmin, setProfileIsAdmin] = useState<boolean>(false)
-
-  // const { userProfile: profile } = useUserProfile()
-  // if (profile === null) {
-  //  console.error('Error al cargar el perfil del usuario al Navbar')
-  // }
-
-  // useEffect(() => {
-  //  const userProfile = async () => {
-  //    const profile = await GetUserProfile()
-  //    setUserProfile(profile)
-  //    setProfileGroupName(profile.group)
-  //    setProfileGroupId(profile.group_id)
-  //    setProfileBackgroundImage(profile.group_backgroud)
-  //    setProfileLogoImage(profile.group_logo)
-  //    setProfileIsAdmin(profile.isAdmin)
-  //  }
-  //  userProfile()
-  // }, [])
-
-  // useEffect(() => {
-  //  if (profileIsAdmin) router.push('/admin')
-  // }, [profileIsAdmin, router])
 
   useEffect(() => {
     const fetchUserInformation = async () => {
