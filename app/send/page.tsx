@@ -1,14 +1,17 @@
 import { ComposeMessage } from '../components/compose-message'
 import { redirect } from 'next/navigation'
-import SendHeader from '../components/send-header'
 import { MessageList } from '../components/messsage-list'
 import { createClient } from '@/utils/supabase/server'
+import { GetUserProfile } from '../actions/user-profile-action'
+import { Avatar, Link } from '@nextui-org/react'
+import { IconArrowLeft } from '@tabler/icons-react'
 
 export default async function Send () {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  const profile = await GetUserProfile()
 
-  if (user === null) {
+  if (user === null || profile === null) {
     redirect('/login')
   }
 
@@ -48,7 +51,14 @@ export default async function Send () {
       <section className='max-w-[600px] w-11/12 mx-auto border-l border-r border-gray-400 dark:border-white/80 min-h-screen'>
         <div className='flex flex-col h-screen'>
           <div className='w-full h-1/10 flex flex-initial items-center justify-start border pt-2 pb-2'>
-            <SendHeader />
+            <div className='w-full flex flex-initial items-center justify-start'>
+              <Link href={'/'}><IconArrowLeft stroke={2} width={30} height={30} /></Link>
+              <Avatar showFallback isBordered radius="full" size="lg" src={profile.avatarurl} className='ml-2 text-gray-700 dark:text-gray-400' />
+              <div className="flex flex-col gap-1 items-start justify-center ml-4">
+                <h4 className="text-small font-semibold leading-none text-default-800">{profile.name}</h4>
+                <h5 className="text-small tracking-tight text-default-500">{profile.username}</h5>
+              </div>
+            </div>
           </div>
           <div className='flex-1 overflow-y-auto bg-gray-200 p-3 rounded-md'>
             <MessageList messages={messages} />

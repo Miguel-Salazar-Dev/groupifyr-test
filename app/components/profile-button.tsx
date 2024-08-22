@@ -4,15 +4,10 @@ import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, Button, 
 import { IconLogout, IconMoon, IconSettings2, IconSun, IconUserEdit } from '@tabler/icons-react'
 import { AuthSignOutButton } from './auth-button-signout'
 import { useTheme } from 'next-themes'
-import { useSelector } from 'react-redux'
-import { type RootState } from '@/lib/store'
 
-// import { useUserProfile } from '../contexts/user-profile-context'
-
-export default function ProfileButton () {
+export default function ProfileButton ({ profile }: { profile: UserProfile | null }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { theme, setTheme } = useTheme()
-  const profile = useSelector((state: RootState) => state.userProfile)
 
   return (
     <div>

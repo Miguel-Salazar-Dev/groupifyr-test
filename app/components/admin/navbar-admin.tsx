@@ -5,15 +5,13 @@ import { useTheme } from 'next-themes'
 import { AuthSignOutButton } from '../auth-button-signout'
 import { useEffect, useState } from 'react'
 import { IconInbox, IconLogout, IconMoon, IconSend, IconSun, IconUserEdit, IconUsersGroup } from '@tabler/icons-react'
-import { useSelector } from 'react-redux'
-import { type RootState } from '@/lib/store'
 
 interface OptionsProps {
   onOptionSelect: (option: string) => void
+  profile: UserProfile | null
 }
 
-export default function NavbarAdmin ({ onOptionSelect }: OptionsProps) {
-  const profile = useSelector((state: RootState) => state.userProfile)
+export default function NavbarAdmin ({ onOptionSelect, profile }: OptionsProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [isMenuOpen, setMenuIsOpen] = useState<boolean>(true) // Inicia abierto
   const { theme, setTheme } = useTheme()
@@ -35,19 +33,19 @@ export default function NavbarAdmin ({ onOptionSelect }: OptionsProps) {
         <div className="flex flex-col items-center h-1/2 pt-20">
           <div className="flex flex-row">
             <Image
-              src={profile.group_logo}
-              alt={`${profile.group_name} Logo`}
+              src={profile?.group_logo}
+              alt={`${profile?.group_name} Logo`}
               className="mr-3 h-6 sm:h-9"
             />
             <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-              {profile.group_name}
+              {profile?.group_name}
             </span>
           </div>
           <div className="mt-8 px-2">
             <Image
               isBlurred
               alt="Imagen de fondo del grupo"
-              src={profile.group_backgroud}
+              src={profile?.group_backgroud}
               fallbackSrc="https://mxwpvnxcecxvaphigssx.supabase.co/storage/v1/object/public/groups/fallback_image.jpg"
             />
           </div>
@@ -103,19 +101,19 @@ export default function NavbarAdmin ({ onOptionSelect }: OptionsProps) {
                 as="button"
                 className="transition-transform text-gray-700 dark:text-gray-400"
                 color="primary"
-                name={profile.name}
+                name={profile?.name}
                 size="lg"
-                src={profile.avatarurl}
+                src={profile?.avatarurl}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" href="#" color="primary" startContent={<IconUserEdit stroke={1} />} className="h-20 gap-2 text-gray-800 dark:text-gray-400">
                 <User
-                  name={profile.name}
+                  name={profile?.name}
                   description={(
                     <div>
-                      <p>{profile.username}</p>
-                      <p>{profile.group_name}</p>
+                      <p>{profile?.username}</p>
+                      <p>{profile?.group_name}</p>
                     </div>
                   )}
                   avatarProps={{

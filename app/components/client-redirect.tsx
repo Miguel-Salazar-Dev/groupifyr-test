@@ -1,31 +1,21 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { setUserProfile } from '@/lib/features/user-state/user-slice'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+interface redirectProps {
+  isAdmin: boolean
+  groupId: string | null
+}
 
-// interface ClientRedirectProps {
-//  profile: UserProfile
-// }
-
-export default function ClientRedirect ({ profile }: { profile: UserProfile | null }) {
-  const router = useRouter()
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (profile !== null) {
-      // Dispatch profile to Redux store
-      dispatch(setUserProfile(profile))
-      // Redirect based on admin status
-      // router.push('/test')
-      if (profile.isAdmin) {
-        router.push('/admin')
-      } else {
-        router.push('/inbox')
-      }
+export default function ClientRedirect ({ isAdmin, groupId }: redirectProps) {
+  if (isAdmin) {
+    redirect('/admin')
+  } else {
+    if (groupId === null) {
+      redirect('/account')
+      return null
+    } else {
+      redirect('/inbox')
     }
-  }, [profile, dispatch, router])
+  }
 
   return null
 }

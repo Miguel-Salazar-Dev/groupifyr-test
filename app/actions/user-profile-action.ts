@@ -21,7 +21,7 @@ export async function GetUserProfile () {
     name: data?.name ?? '',
     username: data?.username ?? '',
     avatarurl: data?.avatar_url ?? '',
-    group: data?.group.name ?? '',
+    group_name: data?.group.name ?? '',
     group_id: data?.group.id ?? '',
     group_backgroud: data?.group.background_img ?? '',
     group_logo: data?.group.logo_img ?? '',

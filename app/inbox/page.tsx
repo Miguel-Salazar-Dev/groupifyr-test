@@ -1,11 +1,11 @@
 'use client'
 
-import { useSelector } from 'react-redux'
 import { MessageList } from '../components/messsage-list'
 import NavbarComponent from '../components/navbar'
 import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
-import { type RootState } from '@/lib/store'
+import { GetUserProfile } from '../actions/user-profile-action'
+import { useRouter } from 'next/navigation'
 interface UserAddress {
   group: string | null
   sub_group_1: string | null
@@ -15,10 +15,30 @@ interface UserAddress {
 
 export default function Inbox () {
   const supabase = createClient()
+  const router = useRouter()
   const [messages, setMessages] = useState<MessageWithAuthor[]>([])
   const [userGroups, setUserGroups] = useState<UserAddress | null>(null)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [profileGroupName, setProfileGroupName] = useState<string>('')
+  const [profileGroupId, setProfileGroupId] = useState<string>('')
+  const [profileBackgroundImage, setProfileBackgroundImage] = useState<string>('')
+  const [profileLogoImage, setProfileLogoImage] = useState<string>('')
 
-  const profile = useSelector((state: RootState) => state.userProfile)
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const profile: UserProfile = await GetUserProfile()
+      if (profile === null) {
+        router.push('/login')
+      }
+      setProfile(profile)
+      setProfileGroupName(profile.group_name)
+      setProfileGroupId(profile.group_id)
+      setProfileBackgroundImage(profile.group_backgroud)
+      setProfileLogoImage(profile.group_logo)
+    }
+
+    getUserProfile()
+  }, [])
 
   useEffect(() => {
     const fetchUserInformation = async () => {
@@ -48,7 +68,7 @@ export default function Inbox () {
       const { data } = await supabase
         .from('messages')
         .select('*, author: profile!inner(*), attach: attachments!inner(*), smiles: smile(user_id)')
-        .eq('profile.id_group', profile?.group_id ?? '')
+        .eq('profile.id_group', profileGroupId)
         .is('profile.admin', true)
         .order('created_at', { ascending: false })
 
@@ -97,25 +117,25 @@ export default function Inbox () {
     if (userGroups !== null) {
       fetchMessages()
     }
-  }, [profile?.group_id, userGroups])
+  }, [profileGroupId, userGroups])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-gray-100 text-black dark:bg-black dark:text-white">
       <section className='max-w-[600px] w-11/12 mx-auto border-l border-r border-gray-200 dark:border-white/80 min-h-screen'>
         <div className='flex flex-col h-screen'>
           <div className='h-1/4 flex flex-col rounded-md bg-cover bg-center bg-no-repeat align-top justify-end' style={{
-            backgroundImage: `url(${profile?.group_backgroud})`
+            backgroundImage: `url(${profileBackgroundImage})`
           }}>
-            <div className='h-[100px] w-[100px] flex flex-col rounded-md bg-cover bg-center bg-no-repeat relative mb-[-50px] ml-1 z-50' style={{ backgroundImage: `url(${profile?.group_logo})` }} />
+            <div className='h-[100px] w-[100px] flex flex-col rounded-md bg-cover bg-center bg-no-repeat relative mb-[-50px] ml-1 z-50' style={{ backgroundImage: `url(${profileLogoImage})` }} />
           </div>
           <div className='flex flex-row w-full h-[50px] align-middle justify-end'>
-            <h1 className='font-semibold text-3xl text-default-700 mr-1'>{profile?.group_name}</h1>
+            <h1 className='font-semibold text-3xl text-default-700 mr-1'>{profileGroupName}</h1>
           </div>
           <div className='flex-1 overflow-y-auto'>
             <MessageList messages={messages} />
             <div className='flex flex-col w-full h-24' />
           </div>
-          <NavbarComponent />
+          <NavbarComponent profile={profile} />
         </div>
       </section>
     </main>

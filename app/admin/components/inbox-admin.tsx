@@ -5,13 +5,10 @@ import { MessageList } from '@/app/components/messsage-list'
 import { Suspense, useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
-import { useSelector } from 'react-redux'
-import { type RootState } from '@/lib/store'
 
-export default function InboxAdmin () {
+export default function InboxAdmin ({ profile }: { profile: UserProfile | null }) {
   const supabase = createClient()
   const router = useRouter()
-  const profile = useSelector((state: RootState) => state.userProfile)
   const [filtro, setFiltro] = useState<string | null>(null)
   const [messages, setMessages] = useState<MessageWithAuthor[]>([])
 
@@ -26,7 +23,7 @@ export default function InboxAdmin () {
       const { data } = await supabase
         .from('messages')
         .select('*, author: profile!inner(*), attach: attachments!inner(*), smiles: smile(user_id)')
-        .eq('profile.id_group', profile.group_id)
+        .eq('profile.id_group', profile?.group_id ?? '')
         .is('profile.admin', false)
         .order('created_at', { ascending: false })
 
@@ -53,7 +50,7 @@ export default function InboxAdmin () {
       setMessages(messages)
     }
     getMessages()
-  }, [profile.group_id, router])
+  }, [profile?.group_id, router])
 
   const handleFilterChange = (categoriaSeleccionada: string | null) => {
     setFiltro(categoriaSeleccionada)
