@@ -18,6 +18,13 @@ declare global {
     smiles: number
     user_has_smiled_message: boolean
   }
+
+  interface InitialProfile {
+    id: string
+    name: string
+    username: string
+    avatarurl: string
+  }
   interface UserProfile {
     name: string
     username: string

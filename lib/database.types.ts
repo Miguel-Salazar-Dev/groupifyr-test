@@ -511,7 +511,13 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_user_profile_and_address: {
+        Args: {
+          profile_data: Json
+          address_data: Json
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

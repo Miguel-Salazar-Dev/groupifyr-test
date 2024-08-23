@@ -10,7 +10,7 @@ export default function ClientRedirect ({ isAdmin, groupId }: redirectProps) {
     redirect('/admin')
   } else {
     if (groupId === null) {
-      redirect('/account')
+      redirect('/registrarse')
       return null
     } else {
       redirect('/inbox')
