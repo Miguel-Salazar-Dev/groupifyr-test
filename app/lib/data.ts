@@ -113,3 +113,17 @@ export async function updateUserProfile (profileData: any, addressData: any) {
 
   return { success: true, data }
 }
+
+export async function updateAvatar (avatar_url: string, user_id: string) {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('profile')
+    .update({
+      avatar_url
+    })
+    .eq('id', user_id)
+    .select()
+  if (error !== null) {
+    console.error('Error al actualizar el Avatar del usuario', error)
+  }
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { createClient } from '@/utils/supabase/client'
-import { Avatar, Button } from '@nextui-org/react'
+import { Avatar } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 
 export default function UploadAvatar ({
@@ -67,25 +67,29 @@ export default function UploadAvatar ({
 
   return (
     <div className='flex flex-col items-center justify-center'>
-      <Avatar
-          showFallback
-          className="transition-transform text-gray-700 dark:text-gray-400 h-40 w-40"
-          color="default"
-          size="lg"
-          src={avatarUrl ?? ''}
-        />
         <div className='flex flex-col'>
-          <Button>{uploading ? 'Uploading ...' : 'Upload'}</Button>
-          <input
-          style={{
-
-          }}
-          type="file"
-          id="single"
-          accept="image/*"
-          onChange={uploadAvatar}
-          disabled={uploading}
-        />
+          <label htmlFor="file_input" className="inline-flex justify-center p-1 text-gray-500 rounded-full cursor-pointer hover:text-gray-900 hover:bg-blue-300 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 w-32 h-32">
+            <div className="flex flex-col items-center justify-center">
+              <Avatar
+                showFallback
+                className="transition-transform text-gray-700 dark:text-gray-400 w-28 h-28 text-large"
+                color="default"
+                // size="lg"
+                src={avatarUrl ?? ''}
+              />
+            </div>
+            <input
+              style={{
+                visibility: 'hidden',
+                position: 'absolute'
+              }}
+              type="file"
+              id="file_input"
+              accept="image/*"
+              onChange={uploadAvatar}
+              disabled={uploading}
+            />
+          </label>
         </div>
     </div>
   )

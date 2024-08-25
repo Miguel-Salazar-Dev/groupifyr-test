@@ -1,19 +1,20 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { fetchInitialProfile, getGroupInformation, getSubGroup1Information, getSubGroup2Information, getSubGroup3Information, updateUserProfile } from '../lib/data'
-import { Avatar, Button, Input, Select, SelectItem } from '@nextui-org/react'
+import { fetchInitialProfile, getGroupInformation, getSubGroup1Information, getSubGroup2Information, getSubGroup3Information, updateAvatar, updateUserProfile } from '../lib/data'
+import { Button, Input, Select, SelectItem } from '@nextui-org/react'
 import InfoIcon from '@/public/assets/info.svg'
 import { useRouter } from 'next/navigation'
+import UploadAvatar from '../account/upload-avatar'
 
-export default function RegistrarseForm () {
+export default function RegistrarseForm ({ user_id }: { user_id: string }) {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [success, setSuccess] = useState(false)
   const [fail, setFail] = useState(false)
   const [alarm, setAlarm] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
-  const [userId, setUserId] = useState<string>('')
+  // const [userId, setUserId] = useState<string>('')
   const [name, setName] = useState<string>('')
   const [username, setUsername] = useState<string>('')
   const [avatar_url, setAvatarUrl] = useState<string>('')
@@ -33,7 +34,7 @@ export default function RegistrarseForm () {
       const profile: InitialProfile = await fetchInitialProfile()
 
       if (profile !== undefined || profile !== null) {
-        setUserId(profile.id)
+        // setUserId(profile.id)
         setName(profile.name)
         setUsername(profile.username)
         setAvatarUrl(profile.avatarurl)
@@ -128,13 +129,13 @@ export default function RegistrarseForm () {
 
   const handleUserUpdate = async () => {
     const profileData = {
-      id: userId,
+      id: user_id,
       name,
       username,
       id_group: selectedGroup
     }
     const addressData = {
-      user_id: userId,
+      user_id,
       group_id: selectedGroup,
       sub_1_id: selectedSubGroup1,
       sub_2_id: selectedSubGroup2,
@@ -173,12 +174,13 @@ export default function RegistrarseForm () {
           </div>
           <div className='w-full flex flex-col justify-start pt-5 px-3 pb-20 overflow-scroll'>
             <div className='flex w-full items-center justify-center'>
-              <Avatar
-                src={avatar_url}
-                alt={name}
-                size='lg'
-                showFallback
-                className='w-10 h-10'
+              <UploadAvatar
+                uid={user_id}
+                url={avatar_url}
+                onUpload={(url) => {
+                  setAvatarUrl(url)
+                  updateAvatar(avatar_url, user_id)
+                }}
               />
             </div>
             <div className='flex flex-col'>
