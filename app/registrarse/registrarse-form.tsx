@@ -13,6 +13,8 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
   const [success, setSuccess] = useState(false)
   const [fail, setFail] = useState(false)
   const [alarm, setAlarm] = useState<string | null>(null)
+  const [selectedAllAddress, setSelectedAllAddress] = useState(false)
+  const [disableButton, setDisableButton] = useState(true)
   const [message, setMessage] = useState<string | null>(null)
   // const [userId, setUserId] = useState<string>('')
   const [name, setName] = useState<string>('')
@@ -121,6 +123,10 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
         setMessage(' hubo un problema cargando los datos del sub grupo 3.')
       } finally {
         setLoading(false)
+        setSelectedAllAddress(true)
+        if (name !== null && selectedAllAddress) {
+          setDisableButton(true)
+        }
       }
     }
 
@@ -160,7 +166,7 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
 
   const redirectUpdated = async () => {
     await new Promise((resolve) => setTimeout(resolve, 2000))
-    router.push('/inbox')
+    router.push('/')
   }
 
   return (
@@ -199,13 +205,13 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
                   className='max-w-sm'
                 />
                 <Input
-                  isClearable
-                  required
+                  isRequired
                   isDisabled={loading}
                   size='md'
                   type="name"
                   name="name"
                   id="name"
+                  color={name === '' ? 'danger' : 'success'}
                   label="Nombre completo"
                   labelPlacement='outside'
                   variant='bordered'
@@ -293,10 +299,13 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
                   onPress={() => { (handleUserUpdate()) }}
                   className='px-10'
                   isLoading={loading}
-                  isDisabled={loading}
+                  isDisabled={disableButton}
                 >
                   {loading ? 'Actualizando...' : 'Actualizar'}
                 </Button>
+                <p>Todas las direcciones: {selectedAllAddress ? 'true' : 'false'}</p>
+                <p>Name: {name !== null ? 'true' : false}</p>
+                <p>Can Submit: {disableButton ? 'true' : 'false'}</p>
               </div>
               {success &&
                 (
