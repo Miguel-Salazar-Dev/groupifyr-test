@@ -6,7 +6,6 @@ import FooterAuth from './footer-auth'
 
 export default function BodyAuth ({ option }: { option: string }) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-gray-100 text-black dark:bg-black dark:text-white">
       <section className='flex flex-col items-center justify-center max-w-[400px] w-11/12 mx-auto min-h-screen'>
         <div className='flex flex-col h-[550px] w-full rounded-lg border border-slate-400'>
           <div className='h-1/5 flex flex-row items-center'>
@@ -24,6 +23,5 @@ export default function BodyAuth ({ option }: { option: string }) {
           </div>
         </div>
       </section>
-    </main>
   )
 }

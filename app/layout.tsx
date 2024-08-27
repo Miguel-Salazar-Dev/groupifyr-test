@@ -16,9 +16,11 @@ export default function RootLayout ({
 }>) {
   return (
     <html lang="en">
-        <body>
-          <Providers>
-            {children}
+        <body className="container">
+          <Providers >
+            <main className="flex-container flex-col full-height min-h-screen overflow-auto items-center justify-between bg-gray-50 text-black dark:bg-zinc-900 dark:text-white">
+              {children}
+            </main>
             <Analytics />
             <SpeedInsights/>
           </Providers>

@@ -120,7 +120,6 @@ export default function Inbox () {
   }, [profileGroupId, userGroups])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-gray-50 text-black dark:bg-zinc-900 dark:text-white">
       <section className='max-w-[600px] w-11/12 mx-auto bg-white dark:bg-zinc-800 min-h-screen'>
         <div className='flex flex-col h-screen'>
           <div className='h-1/4 flex flex-col rounded-md bg-cover bg-center bg-no-repeat align-top justify-end' style={{
@@ -138,6 +137,5 @@ export default function Inbox () {
           <NavbarComponent profile={profile} />
         </div>
       </section>
-    </main>
   )
 }

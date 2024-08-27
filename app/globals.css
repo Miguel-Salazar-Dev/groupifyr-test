@@ -2,12 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
+
+/* Aplica un scroll suave a toda la página */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Asegura que el html y body ocupen toda la altura de la pantalla */
+html,
+body {
+  height: 100%; /* Asegura que html y body ocupen el 100% de la altura de la pantalla */
+  width: 100%;
+  margin: 0; /* Elimina el margen predeterminado del body */
+  padding-top: env(safe-area-inset-top); /* Padding para evitar el notch */
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom); /* Padding para evitar la barra de navegación */
+  padding-left: env(safe-area-inset-left);
+  box-sizing: border-box; /* Incluye el padding en el cálculo del ancho y alto */
+  overflow: hidden;
   -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
+}
+
+/* Ajusta el viewport para dispositivos móviles */
+@supports (-webkit-touch-callout: none) {
+  body {
+    /* Previene el rebote en iOS Safari */
+    position: fixed;
+    width: 100%;
+  }
+  
+  /* Ajusta la altura para tener en cuenta la barra de herramientas de Safari */
+  .full-height {
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+}
+
+/* Mejora la legibilidad del texto */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Asegura que las imágenes se comporten correctamente */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Mejora la accesibilidad para elementos interactivos */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* Previene problemas con el padding en Safari */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Mejora la visualización de elementos flex en Safari */
+.flex-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 svg {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+.container {
+  min-height: 100vh; /* Asegura que el contenedor principal ocupe toda la altura visible */
+  height: calc(100vh - env(safe-area-inset-bottom)); /* Ajusta la altura restando la barra de navegación */
+  box-sizing: border-box; /* Incluye padding en el cálculo del ancho y alto */
+  padding-bottom: env(safe-area-inset-bottom); /* Evita que el contenido quede oculto */
 }
