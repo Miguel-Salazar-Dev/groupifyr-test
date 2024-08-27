@@ -4,6 +4,17 @@ import { Button, Input } from '@nextui-org/react'
 import { IconEye, IconEyeOff } from '@tabler/icons-react'
 import { useState } from 'react'
 import { login, signup } from '@/app/actions/login-signup-action'
+import { useFormStatus } from 'react-dom'
+
+function SubmitLogin () {
+  const { pending } = useFormStatus()
+  return <Button isLoading={pending} color='primary' variant='shadow' type='submit' formAction={login} fullWidth>Iniciar sesión</Button>
+}
+
+function SubmitSignup () {
+  const { pending } = useFormStatus()
+  return <Button isLoading={pending} color='primary' variant='shadow' type='submit' formAction={signup} fullWidth>Regístrate</Button>
+}
 
 export default function FormAuth ({ option }: { option: string }) {
   const [isVisible, setIsVisible] = useState(false)
@@ -63,8 +74,8 @@ export default function FormAuth ({ option }: { option: string }) {
         />
         <div className='flex flex-row w-full max-w-sm items-center justify-evenly'>
           {option === 'LogIn'
-            ? <Button color='primary' variant='shadow' type='submit' formAction={login} fullWidth>Iniciar sesión</Button>
-            : <Button color='primary' variant='shadow' type='submit' formAction={signup} fullWidth>Regístrate</Button>
+            ? <SubmitLogin />
+            : <SubmitSignup />
           }
         </div>
     </form>
