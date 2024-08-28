@@ -145,10 +145,10 @@ export default function Inbox () {
           <div className='flex flex-row w-full h-[35px] align-middle justify-end'>
             <h1 className='font-semibold text-2xl text-default-700 mr-1'>{profileGroupName}</h1>
           </div>
-          <div className='flex-1 overflow-y-auto'>
+          <div className='flex-1 overflow-y-auto mb-[55px]'>
             <MessageList messages={messages} />
           </div>
-          <div className='flex flex-row w-full h-[55px] items-center justify-center'>
+          <div className='fixed bottom-0 left-0 flex flex-row w-full h-[55px] items-center justify-center'>
             <NavbarComponent profile={profile} />
           </div>
         </div>
