@@ -5,23 +5,51 @@ import { IconEye, IconEyeOff } from '@tabler/icons-react'
 import { useState } from 'react'
 import { login, signup } from '@/app/actions/login-signup-action'
 import { useFormStatus } from 'react-dom'
+import { useAlertStore } from '@/app/stores/alert-store'
 
 function SubmitLogin () {
   const { pending } = useFormStatus()
-  return <Button isLoading={pending} color='primary' variant='shadow' type='submit' formAction={login} fullWidth>Iniciar sesión</Button>
+  return (
+    <Button isLoading={pending} color='primary' variant='shadow' type='submit' fullWidth>
+      Iniciar sesión
+    </Button>
+  )
 }
 
 function SubmitSignup () {
   const { pending } = useFormStatus()
-  return <Button isLoading={pending} color='primary' variant='shadow' type='submit' formAction={signup} fullWidth>Regístrate</Button>
+  return (
+    <Button isLoading={pending} color='primary' variant='shadow' type='submit' fullWidth>
+      Regístrate
+    </Button>
+  )
 }
 
 export default function FormAuth ({ option }: { option: string }) {
   const [isVisible, setIsVisible] = useState(false)
   const toggleVisibility = () => { setIsVisible(!isVisible) }
+  const [formError, setFormError] = useState<string>('')
+  const showAlert = useAlertStore(state => state.showAlert)
+
+  const handleSubmit = async (formData: FormData) => {
+    console.log('opcion: ', option)
+    if (option === 'LogIn') {
+      const result = await login(formData)
+      if (result?.error !== null) {
+        setFormError(result.error)
+        showAlert('Error! ', 'Problema al comprobar sus credenciales, revise el correo y contraseña.', 'error')
+      }
+    } else {
+      const result = await signup(formData)
+      if (result?.error !== null) {
+        setFormError(result.error)
+        showAlert('Error! ', formError, 'error')
+      }
+    }
+  }
 
   return (
-    <form className='flex flex-col items-center justify-center w-full gap-6'>
+    <form action={handleSubmit} className='flex flex-col items-center justify-center w-full gap-6'>
       {option === 'SignUp'
         ? (<Input
           isClearable

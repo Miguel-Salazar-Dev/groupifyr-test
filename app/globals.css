@@ -91,4 +91,6 @@ svg {
   height: calc(100vh - env(safe-area-inset-bottom)); /* Ajusta la altura restando la barra de navegación */
   box-sizing: border-box; /* Incluye padding en el cálculo del ancho y alto */
   padding-bottom: env(safe-area-inset-bottom); /* Evita que el contenido quede oculto */
+  margin-left: auto;
+  margin-right: auto;
 }

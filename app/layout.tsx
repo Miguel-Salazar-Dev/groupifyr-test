@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import { Providers } from './providers'
+import Alert from './components/alert'
 
 export const metadata: Metadata = {
   title: 'Groupifyr - Test',
@@ -17,8 +18,9 @@ export default function RootLayout ({
   return (
     <html lang="en">
         <body className="container">
+          <Alert />
           <Providers >
-            <main className="flex-container flex-col full-height min-h-screen overflow-auto items-center justify-between bg-gray-50 text-black dark:bg-zinc-900 dark:text-white">
+            <main className="flex-container mx-auto flex-col full-height min-h-screen overflow-auto items-center justify-between bg-gray-50 text-black dark:bg-zinc-900 dark:text-white">
               {children}
             </main>
             <Analytics />

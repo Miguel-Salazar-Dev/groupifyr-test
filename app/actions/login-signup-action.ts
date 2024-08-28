@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation'
 
 export async function login (formData: FormData) {
   const supabase = createClient()
-
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
@@ -16,11 +15,12 @@ export async function login (formData: FormData) {
   })
 
   if (error !== null) {
-    redirect('/error')
+    console.error('Error al tratar de acceder con el correo.', error)
+    return { error: error.message }
+  } else {
+    revalidatePath('/', 'layout')
+    redirect('/')
   }
-
-  revalidatePath('/', 'layout')
-  redirect('/')
 }
 
 export async function signup (formData: FormData) {
@@ -43,7 +43,8 @@ export async function signup (formData: FormData) {
   })
 
   if (error !== null) {
-    redirect('/error')
+    console.error('Error al tratar de acceder con el correo.', error)
+    return { error: error.message }
   }
 
   revalidatePath('/', 'layout')

@@ -3,23 +3,20 @@
 import { createClient } from '@/utils/supabase/client'
 import { type User } from '@supabase/supabase-js'
 import { type ChangeEvent, useCallback, useEffect, useState } from 'react'
-import InfoIcon from '@/public/assets/info.svg'
 import UploadAvatar from './upload-avatar'
 import { Button, Input, Select, SelectItem, type Selection } from '@nextui-org/react'
 import { getGroupInformation, getSubGroup1Information, getSubGroup2Information, getSubGroup3Information } from '../actions/group-list'
+import { useAlertStore } from '../stores/alert-store'
 
 export default function AccountForm ({ user }: { user: User | null }) {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
-  const [success, setSuccess] = useState(false)
-  const [fail, setFail] = useState(false)
-  const [alarm, setAlarm] = useState<string | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState<boolean>(false)
   const [userId, setUserId] = useState<string | null>(null)
   const [name, setName] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
+  const showAlert = useAlertStore(state => state.showAlert)
 
   // Valores del GRUPO (Corregimientos)
   // El grupo que esta cargado en la BD, y se actualiza cuando hay un update en el select
@@ -88,9 +85,7 @@ export default function AccountForm ({ user }: { user: User | null }) {
       }
     } catch (error) {
       console.log('Error cargando los datos del usuario!')
-      setFail(true)
-      setAlarm('Error!')
-      setMessage(' hubo un problema cargando los datos del usuario.')
+      showAlert('Error!', ' hubo un problema cargando los datos del usuario.', 'error')
     } finally {
       setLoading(false)
     }
@@ -144,14 +139,10 @@ export default function AccountForm ({ user }: { user: User | null }) {
         .select()
       if (error !== null) { alert('Error!') }
       console.log('El perfil ha sido actualizado!')
-      setSuccess(true)
-      setAlarm('Exito!')
-      setMessage(' El perfil ha sido actualizado.')
+      showAlert('Exito!', ' El perfil ha sido actualizado.', 'success')
     } catch (error) {
       console.log('Error actualizando los datos!')
-      setFail(true)
-      setAlarm('Error!')
-      setMessage(' hubo un problema actualizando los datos')
+      showAlert('Error!', ' hubo un problema actualizando los datos', 'error')
     } finally {
       setLoading(false)
     }
@@ -418,28 +409,6 @@ export default function AccountForm ({ user }: { user: User | null }) {
           >
             {loading ? 'Actualizando...' : 'Actualizar'}
           </Button>
-          {success &&
-             (
-                <div className="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
-                  <InfoIcon className="flex-shrink-0 inline w-4 h-4 me-3" />
-                  <span className="sr-only">Info</span>
-                  <div>
-                    <span className="font-medium">{alarm}</span>{message}
-                  </div>
-                </div>
-             )
-          }
-          {fail &&
-            (
-              <div className="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
-                <InfoIcon className="flex-shrink-0 inline w-4 h-4 me-3" />
-                <span className="sr-only">Info</span>
-                <div>
-                  <span className="font-medium">{alarm}</span>{message}
-                </div>
-              </div>
-            )
-          }
         </form>
       </div>
     </div>
