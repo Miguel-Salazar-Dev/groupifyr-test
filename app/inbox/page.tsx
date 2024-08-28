@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
 import { GetUserProfile } from '../actions/user-profile-action'
 import { useRouter } from 'next/navigation'
+import { Image } from '@nextui-org/react'
 interface UserAddress {
   group: string | null
   sub_group_1: string | null
@@ -120,15 +121,29 @@ export default function Inbox () {
   }, [profileGroupId, userGroups])
 
   return (
-      <section className='max-w-[600px] w-11/12 mx-auto bg-white dark:bg-zinc-800 min-h-screen'>
+      <section className='max-w-[37.50em] w-11/12 mx-auto bg-white dark:bg-zinc-800 min-h-screen'>
         <div className='flex flex-col h-screen'>
-          <div className='h-1/4 flex flex-col rounded-md bg-cover bg-center bg-no-repeat align-top justify-end' style={{
-            backgroundImage: `url(${profileBackgroundImage})`
-          }}>
-            <div className='h-[100px] w-[100px] flex flex-col rounded-md bg-cover bg-center bg-no-repeat relative mb-[-50px] ml-1 z-50' style={{ backgroundImage: `url(${profileLogoImage})` }} />
+          <div className='h-[15%] w-full flex flex-col rounded-md align-top justify-start relative'>
+            <Image
+              src={profileBackgroundImage}
+              alt={`Imagen de fondo del grupo ${profileGroupName}`}
+              className='bg-cover bg-center bg-no-repeat' // Ajusta la anchura // Ajusta la altura
+              width='100%'
+              height='15vh'
+              isZoomed
+            />
+            <div className='flex flex-col absolute -bottom-1/4 left-2 w-[12%] md:w-1/6'>
+              <Image
+                  src={profileLogoImage}
+                  alt={`Imagen del logo del grupo ${profileGroupName}`}
+                  className='bg-cover bg-center bg-no-repeat' // Ajusta la anchura // Ajusta la altura
+                  width='100%'
+                  height='100%'
+                />
+            </div>
           </div>
-          <div className='flex flex-row w-full h-[50px] align-middle justify-end'>
-            <h1 className='font-semibold text-3xl text-default-700 mr-1'>{profileGroupName}</h1>
+          <div className='flex flex-row w-full h-[35px] align-middle justify-end'>
+            <h1 className='font-semibold text-2xl text-default-700 mr-1'>{profileGroupName}</h1>
           </div>
           <div className='flex-1 overflow-y-auto'>
             <MessageList messages={messages} />
