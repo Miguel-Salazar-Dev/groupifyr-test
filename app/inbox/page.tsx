@@ -123,7 +123,7 @@ export default function Inbox () {
   return (
       <section className='max-w-[37.50em] w-11/12 mx-auto bg-white dark:bg-zinc-800 min-h-screen'>
         <div className='flex flex-col h-screen'>
-          <div className='h-[15%] w-full flex flex-col rounded-md align-top justify-start relative'>
+          <div className='h-[15vh] w-full flex flex-col rounded-md align-top justify-start relative'>
             <Image
               src={profileBackgroundImage}
               alt={`Imagen de fondo del grupo ${profileGroupName}`}
@@ -132,7 +132,7 @@ export default function Inbox () {
               height='15vh'
               isZoomed
             />
-            <div className='flex flex-col absolute -bottom-1/4 left-2 w-[12%] md:w-1/6'>
+            <div className='flex flex-col absolute -bottom-[1.56em] md:-bottom-[2.50em] left-5 w-[3.13em] md:w-[5.00em]'>
               <Image
                   src={profileLogoImage}
                   alt={`Imagen del logo del grupo ${profileGroupName}`}
@@ -142,13 +142,13 @@ export default function Inbox () {
                 />
             </div>
           </div>
-          <div className='flex flex-row w-full h-[35px] align-middle justify-end'>
-            <h1 className='font-semibold text-2xl text-default-700 mr-1'>{profileGroupName}</h1>
+          <div className='flex flex-row w-full h-[1.88em] md:h-[2.63em] align-middle justify-end'>
+            <h1 className='font-semibold text-lg md:text-2xl text-default-700 mr-1'>{profileGroupName}</h1>
           </div>
-          <div className='flex-1 overflow-y-auto mb-[55px]'>
+          <div className='flex-1 overflow-y-auto mb-[3.75em]'>
             <MessageList messages={messages} />
           </div>
-          <div className='fixed bottom-0 left-0 flex flex-row w-full h-[55px] items-center justify-center'>
+          <div className='fixed bottom-2 left-0 flex flex-row w-full h-[3.44em] items-center justify-center'>
             <NavbarComponent profile={profile} />
           </div>
         </div>
