@@ -37,7 +37,7 @@ export default function FormAuth ({ option }: { option: string }) {
       const result = await login(formData)
       if (result?.error !== null) {
         setFormError(result.error)
-        showAlert('Error! ', 'Problema al comprobar sus credenciales, revise el correo y contraseña.', 'error')
+        showAlert('Error! ', 'Problema al comprobar su correo y/o contraseña.', 'error')
       }
     } else {
       const result = await signup(formData)

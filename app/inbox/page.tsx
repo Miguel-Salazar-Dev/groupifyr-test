@@ -132,9 +132,10 @@ export default function Inbox () {
           </div>
           <div className='flex-1 overflow-y-auto'>
             <MessageList messages={messages} />
-            <div className='flex flex-col w-full h-24' />
           </div>
-          <NavbarComponent profile={profile} />
+          <div className='flex flex-row w-full h-[55px] items-center justify-center'>
+            <NavbarComponent profile={profile} />
+          </div>
         </div>
       </section>
   )

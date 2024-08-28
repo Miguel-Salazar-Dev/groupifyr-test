@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { IconCircleCheck, IconCircleX, IconInfoCircle, IconSquareRoundedX } from '@tabler/icons-react'
+import { IconCircleCheckFilled, IconCircleXFilled, IconInfoCircleFilled } from '@tabler/icons-react'
 import { useAlertStore } from '../stores/alert-store'
 
 const Alert: React.FC = () => {
@@ -26,9 +26,9 @@ const Alert: React.FC = () => {
   }[type]
 
   const stateIcon = {
-    success: <IconCircleCheck stroke={1} className="flex-shrink-0 inline w-4 h-4 me-3" />,
-    error: <IconCircleX stroke={1} className="flex-shrink-0 inline w-4 h-4 me-3" />,
-    info: <IconInfoCircle stroke={1} className="flex-shrink-0 inline w-4 h-4 me-3" />
+    success: <IconCircleCheckFilled className="flex-shrink-0 inline w-6 h-6 me-3" />,
+    error: <IconCircleXFilled className="flex-shrink-0 inline w-6 h-6 me-3" />,
+    info: <IconInfoCircleFilled className="flex-shrink-0 inline w-6 h-6 me-3" />
   }[type]
 
   return (
@@ -46,12 +46,6 @@ const Alert: React.FC = () => {
               <p className="mr-4 flex-grow">
                 <span className="font-medium">{alarm}</span>{message}
               </p>
-              <button
-                onClick={hideAlert}
-                aria-label="Close alert"
-              >
-                <IconSquareRoundedX stroke={1} className='flex-shrink-0 inline w-3 h-3' />
-              </button>
             </div>
           </div>
         </motion.div>

@@ -22,11 +22,13 @@ export default async function Account () {
             <Link href={'/'}><IconArrowLeft stroke={2} width={30} height={30} className='font-semibold text-3xl text-default-700' /></Link>
             <h1 className='font-semibold text-3xl text-default-700'>Pagina de Perfil</h1>
           </div>
-          <div className='w-full flex flex-col justify-start pt-5 px-3 pb-20 overflow-scroll'>
+          <div className='w-full flex flex-col justify-start pt-5 px-3 pb-10 overflow-y-auto'>
             <AccountForm user={user} />
           </div>
+          <div className='flex flex-row w-full h-[55px] items-center justify-center'>
+            <NavbarComponent profile={profile} />
+          </div>
         </div>
-        <NavbarComponent profile={profile} />
       </section>
   )
 }

@@ -4,7 +4,7 @@ import ProfileButton from './profile-button'
 
 export default function NavbarComponent ({ profile }: { profile: UserProfile | null }) {
   return (
-    <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-300 rounded-full bottom-4 left-1/2 dark:bg-gray-700 dark:border-gray-600">
+    <div className="w-full max-w-lg h-12 bg-white border border-gray-300 rounded-full dark:bg-gray-700 dark:border-gray-600">
       <div className="grid h-full max-w-lg grid-cols-3 mx-auto">
         <button data-tooltip-target="tooltip-home" type="button" className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-200 dark:hover:bg-gray-800 group">
           <Link href="/"><IconHomeFilled className='w-7 h-7 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500' /></Link>
@@ -24,7 +24,7 @@ export default function NavbarComponent ({ profile }: { profile: UserProfile | n
           Create new item
           <div className="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <div data-tooltip-target="tooltip-profile" className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-100 dark:hover:bg-gray-800 group">
+        <div data-tooltip-target="tooltip-profile" className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-200 dark:hover:bg-gray-800 group">
           <ProfileButton profile={profile} />
         </div>
     </div>
