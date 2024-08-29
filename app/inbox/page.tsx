@@ -148,7 +148,7 @@ export default function Inbox () {
           <div className='flex-1 overflow-y-auto pb-40'>
             <MessageList messages={messages} />
           </div>
-          <div className='navbar bg-white'>
+          <div className='navbar'>
             <NavbarComponent profile={profile} />
           </div>
         </div>

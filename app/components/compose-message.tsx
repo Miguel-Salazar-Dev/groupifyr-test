@@ -35,7 +35,7 @@ export function ComposeMessage () {
         await addMessage(formData)
         formRef.current?.reset()
       }} className='flex flex-row p-1 w-full align-middle justify-center'>
-        <div className="flex items-center px-3 py-1 rounded-lg bg-gray-50 dark:bg-gray-700 w-full gap-1">
+        <div className="flex items-center px-3 rounded-lg w-full gap-1">
           <div className='flex flex-row w-full gap-1 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500'>
             <div className='flex flex-col w-full gap-[2px]'>
               <Select
