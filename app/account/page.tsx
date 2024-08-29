@@ -25,7 +25,7 @@ export default async function Account () {
           <div className='w-full flex flex-col justify-start pt-5 px-3 pb-40 overflow-y-auto'>
             <AccountForm user={user} />
           </div>
-          <div className='navbar'>
+          <div className='navbar bg-white'>
             <NavbarComponent profile={profile} />
           </div>
         </div>

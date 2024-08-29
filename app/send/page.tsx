@@ -62,7 +62,7 @@ export default async function Send () {
           <div className='flex-1 overflow-y-auto bg-gray-200 p-3 rounded-md'>
             <MessageList messages={messages} />
           </div>
-          <div className='w-full h-2/10 flex flex-initial items-center justify-center'>
+          <div className='w-full h-2/10 flex flex-initial items-center justify-center pb-3'>
             <ComposeMessage />
           </div>
         </div>
