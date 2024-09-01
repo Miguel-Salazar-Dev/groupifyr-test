@@ -24,10 +24,10 @@ export default function AdminPage () {
   }, [])
 
   return (
-    <main className="flex min-h-screen bg-gray-100 text-black dark:bg-black dark:text-white">
+    <section className='flex w-full bg-gray-50 dark:bg-zinc-800 min-h-screen'>
       <NavbarAdmin onOptionSelect={setOptionMenu} profile={profile} />
       {optionMenu === 'IconInbox' && <InboxAdmin profile={profile} />}
       {optionMenu === 'IconSend' && <SendAdmin />}
-    </main>
+    </section>
   )
 }

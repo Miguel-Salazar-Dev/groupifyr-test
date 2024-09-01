@@ -13,8 +13,8 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
   const [success, setSuccess] = useState(false)
   const [fail, setFail] = useState(false)
   const [alarm, setAlarm] = useState<string | null>(null)
-  const [selectedAllAddress, setSelectedAllAddress] = useState(false)
-  const [disableButton, setDisableButton] = useState(true)
+  // const [selectedAllAddress, setSelectedAllAddress] = useState(false)
+  // const [disableButton, setDisableButton] = useState(true)
   const [message, setMessage] = useState<string | null>(null)
   // const [userId, setUserId] = useState<string>('')
   const [name, setName] = useState<string>('')
@@ -123,10 +123,10 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
         setMessage(' hubo un problema cargando los datos del sub grupo 3.')
       } finally {
         setLoading(false)
-        setSelectedAllAddress(true)
-        if (name !== null && selectedAllAddress) {
-          setDisableButton(true)
-        }
+        // setSelectedAllAddress(true)
+        // if (name !== null && selectedAllAddress) {
+        //  setDisableButton(true)
+        // }
       }
     }
 
@@ -298,13 +298,10 @@ export default function RegistrarseForm ({ user_id }: { user_id: string }) {
                   onPress={() => { (handleUserUpdate()) }}
                   className='px-10'
                   isLoading={loading}
-                  isDisabled={disableButton}
+                  // isDisabled={disableButton}
                 >
                   {loading ? 'Actualizando...' : 'Actualizar'}
                 </Button>
-                <p>Todas las direcciones: {selectedAllAddress ? 'true' : 'false'}</p>
-                <p>Name: {name !== null ? 'true' : false}</p>
-                <p>Can Submit: {disableButton ? 'true' : 'false'}</p>
               </div>
               {success &&
                 (

@@ -141,7 +141,7 @@ export default function SendAdmin () {
   }
 
   return (
-      <section className='pl-72 w-11/12 min-h-screen'>
+    <section className='static w-3/4 mx-auto min-h-screen'>
         <div className='flex flex-col w-full h-screen p-5'>
           <div id="branding" className='flex flex-row gap-5 w-full h-[150px] bg-blue-300'>
             <h1 className='flex w-full mt-10 font-semibold size text-3xl text-gray-800 items-center justify-center'>Enviar Mensaje</h1>
@@ -248,6 +248,6 @@ export default function SendAdmin () {
             </div>
           </div>
         </div>
-      </section>
+        </section>
   )
 }

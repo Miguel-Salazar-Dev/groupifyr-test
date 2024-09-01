@@ -77,6 +77,6 @@ export default function InboxAdmin ({ profile }: { profile: UserProfile | null }
           </div>
         </div>
       </div>
-    </section>
+      </section>
   )
 }

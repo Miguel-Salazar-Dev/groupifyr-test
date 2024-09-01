@@ -47,9 +47,9 @@ export default async function Send () {
     }) ?? []
 
   return (
-    <section className='max-w-[37.50em] w-11/12 mx-auto bg-white dark:bg-zinc-800 min-h-screen'>
+    <section className='max-w-[37.50em] w-full md:w-11/12 md:mx-auto bg-white dark:bg-zinc-800 min-h-screen'>
       <div className='flex flex-col h-screen'>
-        <div className='w-full h-1/10 flex flex-initial items-center justify-start border pt-2 pb-2'>
+        <div className='w-full h-1/10 flex flex-initial items-center justify-start pt-2 pb-2'>
           <div className='w-full flex flex-initial items-center justify-start'>
             <Link href={'/'}><IconArrowLeft stroke={2} width={30} height={30} /></Link>
             <Avatar showFallback isBordered radius="full" size="lg" src={profile.avatarurl} className='ml-2 text-gray-700 dark:text-gray-400' />
@@ -59,10 +59,10 @@ export default async function Send () {
             </div>
           </div>
         </div>
-        <div className='flex-1 overflow-y-auto bg-gray-200 p-3'>
+        <div className='flex-1 overflow-y-auto bg-gray-100 dark:bg-zinc-700 p-3'>
           <MessageList messages={messages} />
         </div>
-        <div className='z-[80] bg-[linear-gradient(0deg,#fff_80%,#fff3)] justify-center items-center w-full flex fixed -translate-x-2/4 max-w-full pt-4 pb-1 left-2/4 bottom-0 md:max-w-[37.50em]'>
+        <div className='z-[80] bg-[linear-gradient(0deg,#fff_80%,#fff3)] dark:bg-[linear-gradient(0deg,#27272a_80%,#27272a00)] justify-center items-center w-full flex fixed -translate-x-2/4 max-w-full pt-4 pb-1 left-2/4 bottom-0 md:max-w-[37.50em]'>
           <ComposeMessage />
         </div>
       </div>

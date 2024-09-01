@@ -56,23 +56,24 @@ export function ComposeMessage () {
               <textarea
                 id="content"
                 name='content'
-                rows={2}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none"
+                className="block p-2.5 w-full h-full text-sm text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none"
                 placeholder="¡Cuentanos algo!">
               </textarea>
             </div>
-            <div className='flex items-center justify-center'>
+            <div className='flex flex-col items-center justify-center'>
               {preview !== null && <img src={preview} alt="Image preview" width="100" />}
+              <div className='flex flex-col'>
+                <label htmlFor="file_input" className="inline-flex justify-center p-1 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                  <div className="flex flex-col items-center justify-center pt-2 pb-2">
+                    <IconPaperclip className="w-6 h-6 text-gray-500 dark:text-gray-400" stroke={1.5} />
+                  </div>
+                  <input name="file_input" id="file_input" type="file" className="hidden" onChange={handleFileChange} />
+                  <input name="file_uploaded" id="file_uploaded" type="text" className='hidden' value={isAttachment ?? ''} />
+                </label>
+                <ComposeMessageButton />
+              </div>
             </div>
           </div>
-          <label htmlFor="file_input" className="inline-flex justify-center p-1 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-            <div className="flex flex-col items-center justify-center pt-2 pb-2">
-              <IconPaperclip className="w-6 h-6 text-gray-500 dark:text-gray-400" stroke={1.5} />
-            </div>
-            <input name="file_input" id="file_input" type="file" className="hidden" onChange={handleFileChange} />
-            <input name="file_uploaded" id="file_uploaded" type="text" className='hidden' value={isAttachment ?? ''} />
-          </label>
-          <ComposeMessageButton />
         </div>
       </form>
     </div>
