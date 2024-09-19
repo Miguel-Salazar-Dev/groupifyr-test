@@ -1,17 +1,17 @@
 'use client'
 import { createClient } from '@/utils/supabase/client'
-import { type ChangeEvent, type ChangeEventHandler, Suspense, useState } from 'react'
-import { Button, Select, SelectItem, Textarea } from '@nextui-org/react'
+import { type ChangeEvent, type ChangeEventHandler, useState } from 'react'
+import { Button, Select, SelectItem, Textarea, Image } from '@nextui-org/react'
 import { useFormStatus } from 'react-dom'
 import SendIcon from '@/public/assets/send_icon.svg'
-import { IconPaperclip, IconFilterOff } from '@tabler/icons-react'
+import { IconPaperclip } from '@tabler/icons-react'
 import FilterBox from './filter-box'
 import { categoriesAdmin } from '@/app/actions/category-messages'
-import { revalidatePath } from 'next/cache'
+// import { revalidatePath } from 'next/cache'
 
 export default function SendAdmin () {
   const [filters, setFilters] = useState<any>({})
-  const [isFiltered, setIsFiltered] = useState<boolean>(false)
+  // const [isFiltered, setIsFiltered] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
   const [category, setCategory] = useState<string>('')
   const { pending } = useFormStatus()
@@ -115,7 +115,7 @@ export default function SendAdmin () {
         console.error('Error al aplicar filtros al mensaje: ', filtersError)
       }
       console.log('Message inserted successfully')
-      revalidatePath('/')
+      // revalidatePath('/')
     }
   }
 
@@ -141,54 +141,17 @@ export default function SendAdmin () {
   }
 
   return (
-    <section className='static w-3/4 mx-auto min-h-screen'>
+    <section className='static w-3/4 mx-auto min-h-screen lg:ml-[18rem]'>
         <div className='flex flex-col w-full h-screen p-5'>
-          <div id="branding" className='flex flex-row gap-5 w-full h-[150px] bg-blue-300'>
-            <h1 className='flex w-full mt-10 font-semibold size text-3xl text-gray-800 items-center justify-center'>Enviar Mensaje</h1>
+          <div id="branding" className='flex flex-row gap-5 w-full h-[80px]'>
+            <h1 className='flex w-full font-semibold size text-3xl text-gray-800 items-center justify-center'>Enviar Mensaje</h1>
           </div>
           <div className='flex flex-row w-full gap-2 h-screen pt-3'>
-            <div className='flex flex-col w-3/4'>
-              <div id="sendTo" className='flex flex-col w-full border border-dashed rounded-md border-gray-800'>
-                {isFiltered
-                  ? (
-                      <div className='flex w-full items-center justify-center py-8'>
-                        <IconFilterOff stroke={2} />
-                      </div>
-                    )
-                  : (
-                  <div className='flex flex-col gap-1 p-2'>
-                <Textarea
-                  label='Filtro - Barrios'
-                  isReadOnly
-                  minRows={1}
-                  maxRows={1}
-                  isMultiline
-                  className="block w-full text-xs placeholder-gray-400 text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none"
-                  placeholder='Filtros aplicados para los Barrios'
-                  value={filters.subGroup1}
-                />
-                <Textarea
-                  label='Filtro - Direcciones'
-                  isReadOnly
-                  minRows={1}
-                  maxRows={1}
-                  className="block w-full text-xs placeholder-gray-400 text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none"
-                  placeholder='Filtros aplicados para las Direcciones'
-                  value={filters.subGroup2}
-                />
-              <Textarea
-                  label='Filtro - Propiedades'
-                  isReadOnly
-                  minRows={1}
-                  maxRows={1}
-                  className="block w-full text-xs placeholder-gray-400 text-gray-900 bg-white rounded-lg dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none"
-                  placeholder='Filtros aplicados para las Propiedades'
-                  value={filters.subGroup3}
-                />
-                </div>
-                    )}
+            <div className='flex flex-col w-full'>
+              <div id="sendTo" className='flex flex-col w-full'>
+                <FilterBox onFilterSelect={setFilters} />
               </div>
-              <div id="messageBlock" className='flex flex-col flex-grow w-full h-3/6 justify-end'>
+              <div id="messageBlock" className='flex flex-col flex-grow w-full justify-start overflow-y-auto'>
                 <Select
                   name='category'
                   label='categoria'
@@ -205,28 +168,36 @@ export default function SendAdmin () {
                     </SelectItem>
                   ))}
                 </Select>
-                <textarea
-                  id="content"
-                  name='content'
-                  rows={10}
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-white dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none"
-                  placeholder="¡Cuentanos algo!"
-                  value={message}
-                  onChange={(e) => { setMessage(e.target.value) }}
-                />
-                <div className='flex flex-row w-full text-sm text-gray-900 bg-white dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none'>
+                <div className='flex flex-row h-full'>
+                  <Textarea
+                    id="content"
+                    name='content'
+                    minRows={20}
+                    maxRows={20}
+                    className="block p-2.5 w-full text-sm text-gray-900 dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none border-1 border-solid border-gray-900"
+                    placeholder="¡Cuentanos algo!"
+                    value={message}
+                    onChange={(e) => { setMessage(e.target.value) }}
+                  />
+                  <div className='flex items-center justify-center'>
+                    {preview !== null &&
+                      <Image
+                        src={preview}
+                        alt="Image preview"
+                        className='max-w-72 max-h-52'
+                      />}
+                  </div>
+                </div>
+              </div>
+              <div id="Buttons" className='flex flex-row w-full py-3 gap-1 items-center justify-end'>
+                <div className='flex flex-row text-sm text-gray-900 bg-white dark:bg-gray-800 dark:placeholder-gray-400 dark:text-white resize-none'>
                   <label htmlFor="file_input" className="inline-flex justify-center p-1 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
                     <div className="flex flex-col items-center justify-center pt-2 pb-2">
                       <IconPaperclip className="w-6 h-6 text-gray-500 dark:text-gray-400" stroke={1.5} />
                     </div>
                     <input name="file_input" id="file_input" type="file" className="hidden" onChange={handleFileChange} />
                   </label>
-                  <div className='flex items-center justify-center'>
-                    {preview !== null && <img src={preview} alt="Image preview" width="300" />}
-                  </div>
                 </div>
-              </div>
-              <div id="Buttons" className='flex flex-row w-full py-3 gap-1 items-center justify-end'>
                 <Button
                   isLoading={pending}
                   variant="bordered"
@@ -241,11 +212,7 @@ export default function SendAdmin () {
                 </Button>
               </div>
             </div>
-            <div id="filterSelect" className='flex flex-col w-1/4'>
-              <Suspense fallback={<p>Cargando...</p>}>
-                <FilterBox onFilterSelect={setFilters} isFiltered={setIsFiltered}/>
-              </Suspense>
-            </div>
+
           </div>
         </div>
         </section>

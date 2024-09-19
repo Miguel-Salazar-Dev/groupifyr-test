@@ -4,7 +4,8 @@ import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, 
 import { useTheme } from 'next-themes'
 import { AuthSignOutButton } from '../auth-button-signout'
 import { useEffect, useState } from 'react'
-import { IconInbox, IconLogout, IconMoon, IconSend, IconSun, IconUserEdit, IconUsersGroup } from '@tabler/icons-react'
+import { IconInbox, IconLogout, IconMoon, IconSend, IconSun, IconUserEdit, IconUsersGroup, IconMessage2Share } from '@tabler/icons-react'
+import NextImage from 'next/image'
 
 interface OptionsProps {
   onOptionSelect: (option: string) => void
@@ -27,15 +28,17 @@ export default function NavbarAdmin ({ onOptionSelect, profile }: OptionsProps) 
     <div className="relative flex min-h-screen">
       {/* Sidebar Nav */}
       <div
-        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 dark:text-white z-20 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ width: '18rem' }} // Ancho fijo de 72 (18rem)
+        className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 dark:text-white z-20 transition-transform duration-300 w-full md:w-1/2 lg:w-72 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        // style={{ width: '18rem' }} // Ancho fijo de 72 (18rem)
       >
         <div className="flex flex-col items-center h-1/2 pt-20">
           <div className="flex flex-row">
-            <Image
+            <Avatar
+              showFallback
               src={profile?.group_logo}
               alt={`${profile?.group_name} Logo`}
-              className="mr-3 h-6 sm:h-9"
+              size='lg'
+              className="mr-3"
             />
             <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
               {profile?.group_name}
@@ -44,9 +47,12 @@ export default function NavbarAdmin ({ onOptionSelect, profile }: OptionsProps) 
           <div className="mt-8 px-2">
             <Image
               isBlurred
+              as={NextImage}
               alt="Imagen de fondo del grupo"
               src={profile?.group_backgroud}
-              fallbackSrc="https://mxwpvnxcecxvaphigssx.supabase.co/storage/v1/object/public/groups/fallback_image.jpg"
+              width={220}
+              height={120}
+              // fallbackSrc="https://mxwpvnxcecxvaphigssx.supabase.co/storage/v1/object/public/groups/fallback_image.jpg"
             />
           </div>
           <div className="mt-12 px-2">
@@ -74,6 +80,18 @@ export default function NavbarAdmin ({ onOptionSelect, profile }: OptionsProps) 
                 className='justify-start items-center p-2 bg-transparent text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
               >
                 Enviar mensaje
+              </Button>
+              <Button
+                size="md"
+                radius="sm"
+                color="default"
+                variant='flat'
+                startContent={<IconMessage2Share stroke={2} />}
+                onPress={() => { setOptionMenu('IconMessage2Share') }}
+                fullWidth
+                className='justify-start items-center p-2 bg-transparent text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'
+              >
+                Mensajes Enviados
               </Button>
               <Button
                 size="md"

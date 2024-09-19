@@ -61,15 +61,15 @@ export default function InboxAdmin ({ profile }: { profile: UserProfile | null }
     : messages.filter(message => message.category === filtro)
 
   return (
-    <section className='static max-w-[800px] mx-auto border-l border-r border-gray-200 dark:border-white/80 min-h-screen'>
-      <div>
+    <section className='static md:min-w-[600px] lg:min-w-[800px] max-w-[800px] mx-auto border-l border-r border-gray-200 dark:border-white/80 min-h-screen'>
+      <div className='flex flex-col h-screen max-h-screen'>
         <div className='px-3 py-1 bg-gray-200 dark:bg-gray-800 rounded'>
           <div className='flex flex-col space-y-2 font-normal h-full w-full items-start justify-center'>
             <FilterOption onChange={handleFilterChange} />
           </div>
         </div>
-        <div className='pt-14'>
-          <div className='flex-1 overflow-y-auto'>
+        <div className='flex flex-col pt-14 overflow-y-auto'>
+        <div className='flex flex-col'>
             <Suspense fallback={<p>Loading Messages...</p>}>
               <MessageList messages={filteredMessages} />
             </Suspense>

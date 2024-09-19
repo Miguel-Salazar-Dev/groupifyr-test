@@ -7,7 +7,7 @@ import { type ChangeEvent, useEffect, useState } from 'react'
 
 interface FilterBoxProps {
   onFilterSelect: (filter: any) => void
-  isFiltered: (isAllCorregimiento: boolean) => void
+  // isFiltered: (isAllCorregimiento: boolean) => void
 }
 
 interface FilterData {
@@ -17,7 +17,7 @@ interface FilterData {
   subGroup3: Array<{ id: string, name: string }>
 }
 
-export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProps) {
+export default function FilterBox ({ onFilterSelect }: FilterBoxProps) {
   const [filterData, setFilterData] = useState<FilterData>({
     group: [],
     subGroup1: [],
@@ -25,7 +25,7 @@ export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProp
     subGroup3: []
   })
   const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
+  // const [error, setError] = useState<string | null>(null)
   const [selectedGroup, setSelectedGroup] = useState<string[]>([])
   const [selectedSubGroup1, setSelectedSubGroup1] = useState<string[]>([])
   const [selectedSubGroup2, setSelectedSubGroup2] = useState<string[]>([])
@@ -38,10 +38,10 @@ export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProp
       try {
         const supabase = createClient()
         const profile = GetUserProfile()
-        const { data: group, error: errorGroup } = await supabase.from('group').select('id, name').eq('id', (await profile).group_id)
-        const { data: subGroup1, error: error1 } = await supabase.from('sub_group_1').select('id, name')
-        const { data: subGroup2, error: error2 } = await supabase.from('sub_group_2').select('id, name')
-        const { data: subGroup3, error: error3 } = await supabase.from('sub_group_3').select('id, name')
+        const { data: group, error: errorGroup } = await supabase.from('group').select('id, name').eq('id', (await profile).group_id).order('name', { ascending: true })
+        const { data: subGroup1, error: error1 } = await supabase.from('sub_group_1').select('id, name').order('name', { ascending: true })
+        const { data: subGroup2, error: error2 } = await supabase.from('sub_group_2').select('id, name').order('name', { ascending: true })
+        const { data: subGroup3, error: error3 } = await supabase.from('sub_group_3').select('id, name').order('name', { ascending: true })
 
         if (errorGroup !== null || error1 !== null || error2 !== null || error3 !== null) {
           throw new Error('Error al recuperar datos de la base de datos')
@@ -59,7 +59,7 @@ export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProp
         }
       } catch (err) {
         console.error(err)
-        setError('Ocurrió un error al cargar los datos. Por favor, intenta nuevamente.')
+        // setError('Ocurrió un error al cargar los datos. Por favor, intenta nuevamente.')
       } finally {
         setLoading(false)
       }
@@ -75,9 +75,9 @@ export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProp
       subGroup2: selectedSubGroup2,
       subGroup3: selectedSubGroup3
     })
-    isFiltered(
-      allCorregimiento
-    )
+    // isFiltered(
+    //  allCorregimiento
+    // )
   }, [allCorregimiento, selectedGroup, selectedSubGroup1, selectedSubGroup2, selectedSubGroup3])
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProp
   }, [allCorregimiento, loading])
 
   return (
-    <div className='flex flex-col gap-3'>
+    <div className='flex flex-row gap-3'>
       <Switch
         isSelected={allCorregimiento}
         onValueChange={setAllCorregimiento}
@@ -104,13 +104,15 @@ export default function FilterBox ({ onFilterSelect, isFiltered }: FilterBoxProp
         startContent={<IconCircleCheck stroke={2} />}
         endContent={<IconCircleX stroke={2} />}
       >
-        ¿Envío a todo el corregimiento?
+        ¿Todo grupo?
       </Switch>
       <p className="text-small text-default-500">{loading ? 'cargando...' : 'Listo!!!'}</p>
+      {/*
       <p className="text-small text-default-500">{error ?? 'No hay errores'}</p>
+      */}
       <Select
         label="Barrios"
-        isDisabled={allCorregimiento}
+        isDisabled={allCorregimiento && loading}
         placeholder="Selecciona los barrios"
         selectionMode="multiple"
         selectedKeys={selectedSubGroup1}

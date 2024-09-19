@@ -5,6 +5,8 @@ import SendAdmin from './components/send-admin'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { GetUserProfile } from '../actions/user-profile-action'
+import SentAdmin from './components/sent-admin'
+import ConfigGroup from './components/config-admin'
 
 export default function AdminPage () {
   const router = useRouter()
@@ -28,6 +30,8 @@ export default function AdminPage () {
       <NavbarAdmin onOptionSelect={setOptionMenu} profile={profile} />
       {optionMenu === 'IconInbox' && <InboxAdmin profile={profile} />}
       {optionMenu === 'IconSend' && <SendAdmin />}
+      {optionMenu === 'IconMessage2Share' && <SentAdmin groupId={profile?.group_id ?? ''} />}
+      {optionMenu === 'IconUsersGroup' && <ConfigGroup groupId={profile?.group_id ?? ''} />}
     </section>
   )
 }

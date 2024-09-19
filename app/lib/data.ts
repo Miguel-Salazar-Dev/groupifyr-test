@@ -114,6 +114,25 @@ export async function updateUserProfile (profileData: any, addressData: any) {
   return { success: true, data }
 }
 
+export async function updateGroupInformation (groupId: string, groupName: string, groupWebsite: string) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('group')
+    .update({
+      name: groupName,
+      website: groupWebsite
+    })
+    .eq('id', groupId)
+    .select()
+
+  if (error !== null) {
+    console.error('Error al actualizar la información del grupo: ', error)
+    return { success: false, error }
+  }
+
+  return { success: true, data }
+}
+
 export async function updateAvatar (avatar_url: string, user_id: string) {
   const supabase = createClient()
   const { error } = await supabase
@@ -126,4 +145,118 @@ export async function updateAvatar (avatar_url: string, user_id: string) {
   if (error !== null) {
     console.error('Error al actualizar el Avatar del usuario', error)
   }
+}
+
+export async function fetchGroup (groupId: string) {
+  const supabase = createClient()
+  const { data: group, error } = await supabase
+    .from('group')
+    .select('*')
+    .eq('id', groupId)
+    .single()
+
+  if (error !== null) {
+    console.error('Problema conectando a la BD del grupo', error)
+  }
+
+  return group
+}
+
+export async function fetchGroupList (groupId: string) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('profile')
+    .select('name, username, avatar_url, admin')
+    .eq('id_group', groupId)
+
+  if (error !== null) {
+    console.error('Problema conectando a la BD de la lista de usuarios', error)
+  }
+
+  return data
+}
+
+export async function uploadImageStorage (filePath: string, file: File) {
+  const supabase = createClient()
+  console.log(filePath)
+  console.log(file)
+  const { error } = await supabase
+    .storage
+    .from('groups')
+    .upload(filePath, file)
+
+  if (error !== null) {
+    console.error('Error al actualizar la imagen!', error)
+    return { success: false, error }
+  }
+
+  return { success: true }
+}
+
+export async function downloadLogo (uid: string | null) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('group')
+    .select('logo_img')
+    .eq('id', uid ?? '')
+    .single()
+
+  if (error !== null) {
+    console.error('Error al obtener el logo del grupo: ', error)
+    return { success: false, error }
+  }
+
+  return { success: true, data }
+}
+
+export async function updateLogo (id: string, logo_img: string) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('group')
+    .update({
+      logo_img
+    })
+    .eq('id', id)
+    .select()
+
+  if (error !== null) {
+    console.error('Error al actualizar el logo del grupo: ', error)
+    return { success: false, error }
+  }
+
+  return { success: true, data }
+}
+
+export async function downloadBackground (uid: string | null) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('group')
+    .select('background_img')
+    .eq('id', uid ?? '')
+    .single()
+
+  if (error !== null) {
+    console.error('Error al obtener el logo del grupo: ', error)
+    return { success: false, error }
+  }
+
+  return { success: true, data }
+}
+
+export async function updateBackground (id: string, background_img: string) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('group')
+    .update({
+      background_img
+    })
+    .eq('id', id)
+    .select()
+
+  if (error !== null) {
+    console.error('Error al actualizar la imagen del grupo: ', error)
+    return { success: false, error }
+  }
+
+  return { success: true, data }
 }
