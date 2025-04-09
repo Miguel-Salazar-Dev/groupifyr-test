@@ -6,7 +6,9 @@ import { createClient } from '@/utils/supabase/client'
 import { useEffect, useState } from 'react'
 import { GetUserProfile } from '../actions/user-profile-action'
 import { useRouter } from 'next/navigation'
-import { Image } from '@nextui-org/react'
+import Image from 'next/image'
+import { BackgroundImageSkeleton, LogoImageSkeleton, MessageListSkeleton } from '../components/ui/skeletons'
+// import { Image } from '@nextui-org/react'
 interface UserAddress {
   group: string | null
   sub_group_1: string | null
@@ -17,6 +19,8 @@ interface UserAddress {
 export default function Inbox () {
   const supabase = createClient()
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [messageLoading, setMessageLoading] = useState<boolean>(true)
   const [messages, setMessages] = useState<MessageWithAuthor[]>([])
   const [userGroups, setUserGroups] = useState<UserAddress | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
@@ -27,15 +31,22 @@ export default function Inbox () {
 
   useEffect(() => {
     const getUserProfile = async () => {
-      const profile: UserProfile = await GetUserProfile()
-      if (profile === null) {
-        router.push('/login')
+      try {
+        setIsLoading(true)
+        const profile: UserProfile = await GetUserProfile()
+        if (profile === null) {
+          router.push('/login')
+        }
+        setProfile(profile)
+        setProfileGroupName(profile.group_name)
+        setProfileGroupId(profile.group_id)
+        setProfileBackgroundImage(profile.group_backgroud)
+        setProfileLogoImage(profile.group_logo)
+      } catch (error) {
+        console.error('Error al tratar de obtener la información del Usuario')
+      } finally {
+        setIsLoading(false)
       }
-      setProfile(profile)
-      setProfileGroupName(profile.group_name)
-      setProfileGroupId(profile.group_id)
-      setProfileBackgroundImage(profile.group_backgroud)
-      setProfileLogoImage(profile.group_logo)
     }
 
     getUserProfile()
@@ -65,6 +76,7 @@ export default function Inbox () {
 
   useEffect(() => {
     const fetchMessages = async () => {
+      setMessageLoading(true)
       const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase
         .from('messages')
@@ -112,6 +124,7 @@ export default function Inbox () {
         })
 
         setMessages(filteredMessages)
+        setMessageLoading(false)
       }
     }
 
@@ -124,29 +137,54 @@ export default function Inbox () {
       <section className='max-w-[37.50em] w-11/12 mx-auto bg-white dark:bg-zinc-800 min-h-screen'>
         <div className='flex flex-col h-screen'>
           <div className='h-[15vh] w-full flex flex-col rounded-md align-top justify-start relative'>
-            <Image
-              src={profileBackgroundImage}
-              alt={`Imagen de fondo del grupo ${profileGroupName}`}
-              className='bg-cover bg-center bg-no-repeat' // Ajusta la anchura // Ajusta la altura
-              width='100%'
-              height='15vh'
-              isZoomed
-            />
-            <div className='flex flex-col absolute -bottom-[1.56em] md:-bottom-[2.50em] left-5 w-[3.13em] md:w-[5.00em]'>
-              <Image
-                  src={profileLogoImage}
-                  alt={`Imagen del logo del grupo ${profileGroupName}`}
-                  className='bg-cover bg-center bg-no-repeat' // Ajusta la anchura // Ajusta la altura
-                  width='100%'
-                  height='100%'
+            {isLoading
+              ? (
+                <BackgroundImageSkeleton />
+                )
+              : (
+                <Image
+                  src={profileBackgroundImage}
+                  alt={`Imagen de fondo del grupo ${profileGroupName}`}
+                  fill
+                  sizes="100vw"
+                  style={{
+                    objectFit: 'cover'
+                  }}
                 />
+                )}
+            <div className='flex flex-col absolute -bottom-[1.56em] md:-bottom-[2.50em] left-5 w-[3.13em] h-[3.13em] md:w-[5.00em] md:h-[5.00em]'>
+              {isLoading
+                ? (
+                  <LogoImageSkeleton />
+                  )
+                : (
+                  <Image
+                    src={profileLogoImage}
+                    alt={`Imagen de fondo del grupo ${profileGroupName}`}
+                    // placeholder='blur'
+                    fill
+                    sizes="100vw"
+                    style={{
+                      objectFit: 'cover'
+                    }}
+                  />
+                  )}
             </div>
           </div>
           <div className='flex flex-row w-full h-[1.88em] md:h-[2.63em] align-middle justify-end'>
             <h1 className='font-semibold text-lg md:text-2xl text-default-700 mr-1'>{profileGroupName}</h1>
           </div>
           <div className='flex-1 overflow-y-auto pb-40'>
-            <MessageList messages={messages} />
+            {!messageLoading
+              ? (
+                  <MessageList messages={messages} />
+                )
+              : (
+                  Array(3).fill(0).map((_, i) => (
+                    <MessageListSkeleton key={i} />
+                  ))
+                )}
+
           </div>
           <div className='navbar'>
             <NavbarComponent profile={profile} />
